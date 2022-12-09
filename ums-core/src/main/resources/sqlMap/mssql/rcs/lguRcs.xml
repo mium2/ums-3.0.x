@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.rcs.lgu">
+
+
+    <insert id="inRcsSend" parameterType="kr.uracle.ums.codec.redis.vo.rcs.LguRcsProcessBean">
+        <![CDATA[
+       		INSERT INTO RCS_MSG(
+       			 STATUS, 			SENDABLE, 		REQDATE, 		PHONE,			CALLBACK
+       			,TYPE, 				MSG_HEADER,		MSG_TITLE, 		MSG,			MSG_FOOTER
+       			,MSG_COPYALLOWED, 	FALLBACK_YN,	IMG_GROUP_KEY,	IMG_GROUP_CNT, 	MSGBASE_ID
+       			,BRAND_ID, 			RCS_OBJECT, 	BTN_OBJECT, 	BTN_CNT,		BTN_INSERT_TYPE
+       			,BTN_TEXT_1, 		BTN_TYPE_1, 	BTN_CONTENTS_1, BTN_TEXT_2, 	BTN_TYPE_2
+       			,BTN_CONTENTS_2, 	BTN_TEXT_3, 	BTN_TYPE_3, 	BTN_CONTENTS_3, ETC1
+       			,ETC2, 				ETC3, 			ETC4, 			ETC5, 			ETC6
+       			,WT_REG_USER_ID,	WT_SEND_GRP       			
+       		) 
+			VALUES(
+				 #{STATUS}, 			#{SENDABLE}, 	GETDATE(), 			#{PHONE}, 			#{CALLBACK}
+				,#{TYPE}, 				#{MSG_HEADER},	#{MSG_TITLE}, 		#{MSG},				#{MSG_FOOTER}
+				,#{MSG_COPYALLOWED},	#{FALLBACK_YN},	#{IMG_GROUP_KEY},	#{IMG_GROUP_CNT}, 	#{MSGBASE_ID}
+				,#{BRAND_ID},			#{RCS_OBJECT}, 	#{BTN_OBJECT}, 		#{BTN_CNT},			#{BTN_INSERT_TYPE}
+       			,#{BTN_TEXT_1}, 		#{BTN_TYPE_1}, 	#{BTN_CONTENTS_1}, 	#{BTN_TEXT_2}, 		#{BTN_TYPE_2}
+       			,#{BTN_CONTENTS_2}, 	#{BTN_TEXT_3}, 	#{BTN_TYPE_3}, 		#{BTN_CONTENTS_3},	#{ETC1}
+       			,#{ETC2}, 				#{ETC3}, 		#{ETC4}, 			#{ETC5}, 			#{ETC6}
+       			,#{WT_REG_USER_ID},		#{WT_SEND_GRP}       			
+			)
+        ]]>
+        <selectKey keyProperty="MSGKEY" resultType="long">
+            SELECT @@identity
+        </selectKey>        
+    </insert>
+
+    <insert id="inRcsImg" parameterType="kr.uracle.ums.codec.redis.vo.rcs.LguRcsProcessBean">
+        <![CDATA[
+        insert into RCS_IMG(
+        	 GROUP_KEY,	GROUP_CNT,	STATUS,		SENDABLE
+        	,BRAND_ID,	IMG_PATH,	REQDATE,	TEMPLATE_YN
+        )
+        values(
+        	 #{IMG_GROUP_KEY}, 	#{IMG_GROUP_CNT}, 	#{STATUS}, 	#{SENDABLE}
+        	,#{BRAND_ID}, 		#{IMG_PATH}, 		GETDATE(), 	'N'
+        )
+        ]]>
+    </insert>
+</mapper>

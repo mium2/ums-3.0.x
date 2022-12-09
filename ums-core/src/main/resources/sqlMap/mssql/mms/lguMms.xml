@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mms.lgu">
+    <insert id="inMmsSend" parameterType="kr.uracle.ums.codec.redis.vo.mms.LguMmsProcessBean">
+        <![CDATA[
+        insert into MMS_MSG(SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, FILE_CNT, FILE_CNT_REAL, FILE_PATH1, FILE_PATH1_SIZ, EXPIRETIME, TYPE, ID, POST, ETC1, ETC2, ETC3)
+        values(#{SUBJECT}, #{RECEIVE_MOBILE_NO}, #{CALLBACK}, #{STATUS}, now(), #{MMS_MSG}, #{FILE_CNT}, #{FILE_CNT_REAL}, #{FILE_PATH1}, #{FILE_PATH1_SIZE}, #{EXPIRETIME}, #{TYPE}, #{SENDERID}, #{SENDGROUPCODE}, #{ETC1}, #{ETC2}, #{ETC3})
+        ]]>
+        <selectKey keyProperty="MSGKEY" resultType="long">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <insert id="inFromMmsToSmsSendMsg" parameterType="kr.uracle.ums.codec.redis.vo.mms.LguMmsProcessBean">
+        <![CDATA[
+        insert into SC_TRAN(TR_SENDDATE, TR_ID, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG, TR_ETC1, TR_ETC2, TR_ETC3)
+        values(now(), #{TR_ID}, #{TR_SENDSTAT}, #{TR_MSGTYPE}, #{TR_PHONE}, #{TR_CALLBACK}, #{SMS_MSG}, #{TR_ETC1}, #{TR_ETC2}, #{TR_ETC3})
+        ]]>
+        <selectKey keyProperty="MSGKEY" resultType="long">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+</mapper>

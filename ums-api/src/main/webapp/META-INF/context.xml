@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--><!-- The contents of this file will be loaded for each web application --><Context>
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <!-- Uncomment this to disable session persistence across Tomcat restarts -->
+    <!--
+    <Manager pathname="" />
+    -->
+
+    <!-- Uncomment this to enable Comet connection tacking (provides events
+         on session expiration as well as webapp lifecycle) -->
+    <!--
+    <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
+    -->
+
+
+	<!-- ################################# -->
+	<!-- ##				ORACLE 11g 						## -->
+	<!-- ################################# -->
+
+	<Resource name="jdbc/oracleUMS"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="oracle.jdbc.OracleDriver"
+			  url="jdbc:oracle:thin:@211.241.199.243:1521:orcl"
+			  username="UMS30"
+			  password="uracle1234"
+			  maxActive="100"
+			  maxIdle="100"
+			  minIdle="30"
+			  maxWait="-1"
+			  initialSize="10"
+	/>
+
+<!--
+        <Resource name="jdbc/oracleUMS"
+                  auth="Container"
+                  type="javax.sql.DataSource"
+                  driverClassName="oracle.jdbc.OracleDriver"
+                  url="jdbc:oracle:thin:@211.241.199.66:1521:ORCL"
+                  username="UMS30"
+                  password="uracle1234"
+				  maxTotal="50"
+                  maxIdle="50"
+                  minIdle="1"
+				  maxWaitMillis="-1"
+				  initialSize="10"
+        />
+-->
+    <!--
+    <Resource name="jdbc/oracleUMS"
+              auth="Container"
+              type="javax.sql.DataSource"
+              driverClassName="oracle.jdbc.OracleDriver"
+              url="jdbc:oracle:thin:@211.241.199.243:1521:orcl"
+              username="push50ee"
+              password="uracle1234"
+              maxTotal="50"
+              maxIdle="50"
+              minIdle="1"
+              maxWaitMillis="-1"
+              initialSize="10"
+    />
+    -->
+	<!--
+        <Resource name="jdbc/oracleLEGACY"
+                  auth="Container"
+                  type="javax.sql.DataSource"
+                  driverClassName="oracle.jdbc.OracleDriver"
+                      url="jdbc:oracle:thin:@211.241.199.243:1521:orcl"
+                  username="UMS"
+                  password="ums!@#$"
+                  maxActive="200"
+                  maxIdle="50"
+                  minIdle="30"
+                  maxWait="-1"
+        />
+    -->
+	<!--
+	<Resource name="jdbc/oracleUMS"
+	          auth="Container"
+	          type="javax.sql.DataSource" 
+	          driverClassName="oracle.jdbc.OracleDriver"
+	          url="jdbc:oracle:thin:@211.241.199.202:1521:MSPDB"
+	          username="mspuser"
+	          password="mspuser"
+	          maxActive="200"
+	          maxIdle="50"
+	          minIdle="30"
+	          maxWait="-1" 
+	/>
+
+		<Resource name="jdbc/oracleLEGACY"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="oracle.jdbc.OracleDriver"
+				  url="jdbc:oracle:thin:@211.241.199.202:1521:MSPDB"
+			  username="mspuser"
+			  password="mspuser"
+			  maxActive="200"
+			  maxIdle="50"
+			  minIdle="30"
+			  maxWait="-1"
+	/>
+-->
+<!--
+	<Resource name="jdbc/oracleUMS"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="oracle.jdbc.OracleDriver"
+			  url="jdbc:oracle:thin:@52.79.96.155:1521:MSPDB"
+			  username="mspuser"
+			  password="mspuser"
+			  maxActive="200"
+			  maxIdle="50"
+			  minIdle="30"
+			  maxWait="-1"
+	/>-->
+	<!--
+        <Resource name="jdbc/oracleLEGACY"
+                  auth="Container"
+                  type="javax.sql.DataSource"
+                  driverClassName="oracle.jdbc.OracleDriver"
+                  url="jdbc:oracle:thin:@211.241.199.215:1521:ORCLCDB"
+                  username="umsuser"
+                  password="ums2021"
+                  maxActive="50"
+                  maxIdle="50"
+                  minIdle="1"
+                  maxWaitMillis="-1"
+        />
+        -->
+        <!--
+             <Resource name="jdbc/mssqlUMS"
+                       auth="Container"
+                       type="javax.sql.DataSource"
+                       driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+                       url="jdbc:sqlserver://211.241.199.243:1433;DatabaseName=UMS;"
+                       username="SA"
+                       password="1110"
+                       testOnBorrow="true"
+                       maxActive="500"
+                       minIdle="100"
+                       maxIdle="500"
+                      maxWaitMillis="-1"
+             />
+        -->
+
+    <!-- 	<Resource name="jdbc/MySQLUPNS"
+                   auth="Container"
+                   type="javax.sql.DataSource"
+                   driverClassName="com.mysql.jdbc.Driver"
+                   url="jdbc:mysql://211.241.199.214:3306/MSP_PDB?characterEncoding=UTF-8"
+                   username="MSP_PUSH"
+                   password="!dusrnthvntnl!"
+                   testOnBorrow="true"
+                   maxActive="500"
+                   minIdle="100"
+                   maxIdle="500"
+                   maxWait="-1"
+         />-->
+<!--
+	<Resource name="jdbc/mysqlUMS"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="com.mysql.jdbc.Driver"
+			  url="jdbc:mysql://211.241.199.243:3306/UMS30?characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
+			  username="root"
+			  password="1110"
+			  testOnBorrow="true"
+			  minIdle="30"
+			  maxActive="100"
+			  maxIdle="100"
+			  maxWait="-1"
+			  validationquery="select 1"
+			/>
+-->
+	<Resource name="jdbc/mysqlUMS"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="com.mysql.jdbc.Driver"
+			  url="jdbc:mysql://211.241.199.66:3306/ums30?characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
+			  username="ums30"
+			  password="uracle1234"
+			  testOnBorrow="true"
+			  minIdle="10"
+			  maxActive="100"
+			  maxIdle="100"
+			  maxWaitMillis="-1"
+			  validationquery="select 1"
+	/>
+	<!--
+	<Resource name="jdbc/mysqlUMS"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="com.mysql.jdbc.Driver"
+			  url="jdbc:mysql://211.241.199.216:3306/mspdb?characterEncoding=UTF-8"
+			  username="mspuser"
+			  password="mspuser"
+			  testOnBorrow="true"
+			  minIdle="100"
+			  maxActive="100"
+			  maxIdle="100"
+			  maxWaitMillis="-1"
+			  validationquery="select 1"
+	/>
+	-->
+	<!--
+        <Resource name="jdbc/mysqlLEGACY"
+                  auth="Container"
+                  type="javax.sql.DataSource"
+                  driverClassName="com.mysql.jdbc.Driver"
+                  url="jdbc:mysql://211.241.199.243:3306/ums?characterEncoding=UTF-8"
+                  username="root"
+                  password="1110"
+                  testOnBorrow="true"
+                  minIdle="100"
+                  maxActive="100"
+                  maxIdle="100"
+                  maxWaitMillis="-1"
+                  validationquery="select 1"
+        />
+        -->
+        <!-- ################################# -->
+	<!-- ##				DB2 								## -->
+	<!-- 211.241.199.243 접속정보 : 아이디 : db2admin 패스 : 1110 DB명 :SAMPLE -->
+	<!-- 211.241.199.216 접속정보 : 아이디 : db2inst1 패스 : qlalfqjsgh DB명 :MSP -->
+	<!-- ################################# -->
+	<!--
+ 	  <Resource name="jdbc/db2UMS"
+ 	     auth="Container"
+ 	     type="javax.sql.DataSource"
+ 	     username="db2inst1"
+ 	     password="qlalfqjsgh"
+ 	     driverClassName="com.ibm.db2.jcc.DB2Driver"
+ 	     url="jdbc:db2://211.241.199.216:50000/MSP"
+ 	     maxActive="100"
+ 	     maxIdle="30" />
+	-->
+	<!-- ################################# -->
+	<!-- ##				POSTGRESQL 								## -->
+	<!-- ################################# -->
+<!--
+        <Resource name="jdbc/postgresqlUMS"
+                  auth="Container"
+                  type="javax.sql.DataSource"
+                  username="UMS30"
+                  password="uracle1234"
+                  driverClassName="org.postgresql.Driver"
+                  url="jdbc:postgresql://211.241.199.243:5432/UMS30?currentSchema=public"
+                  connectionProperties=""
+                  maxActive="100"
+                  maxWaitMillis="10000"
+                  validationQuery="select 1;"
+                  removeAbandoned="true"
+                  logAbandoned="true"
+                  testWhileIdle="true"
+                  timeBetweenEvictionRunsMillis="60000"
+                  minEvictableIdleTimeMillis="300000" />
+-->
+	<Resource name="jdbc/postgresqlUMS"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  username="postgres"
+			  password="uracle1234"
+			  driverClassName="org.postgresql.Driver"
+			  url="jdbc:postgresql://211.241.199.66:5432/postgres?currentSchema=public"
+			  connectionProperties=""
+			  maxActive="100"
+			  maxWaitMillis="10000"
+			  validationQuery="select 1;"
+			  removeAbandoned="true"
+			  logAbandoned="true"
+			  testWhileIdle="true"
+			  timeBetweenEvictionRunsMillis="60000"
+			  minEvictableIdleTimeMillis="300000" />
+
+	<Resource name="jdbc/postgreLower"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  username="UMS30_LC"
+			  password="uracle1234"
+			  driverClassName="org.postgresql.Driver"
+			  url="jdbc:postgresql://211.241.199.243:5432/UMS30_LC?currentSchema=public"
+			  connectionProperties=""
+			  maxActive="100"
+			  maxWaitMillis="10000"
+			  validationQuery="select 1;"
+			  removeAbandoned="true"
+			  logAbandoned="true"
+			  testWhileIdle="true"
+			  timeBetweenEvictionRunsMillis="60000"
+			  minEvictableIdleTimeMillis="300000" />
+
+        <!-- ################################# -->
+	<!-- ##				CUBRID 			## -->
+	<!-- ################################# -->
+	<!--
+	<Resource name="jdbc/cubridUPNS"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  username="push50"
+			  password="uracle1234"
+			  driverClassName="cubrid.jdbc.driver.CUBRIDDriver"
+			  url="jdbc:cubrid:211.241.199.243:30000:push50:::"
+			  connectionProperties=""
+			  maxActive="100"
+			  maxWait="10000"
+			  validationQuery="select 1;"
+			  removeAbandoned="true"
+			  logAbandoned="true"
+			  testWhileIdle="true"
+			  timeBetweenEvictionRunsMillis="60000"
+			  minEvictableIdleTimeMillis="300000" />
+	-->
+<!--
+	<Resource name="jdbc/cubridUMS"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  username="dba"
+			  password="push1234"
+			  driverClassName="cubrid.jdbc.driver.CUBRIDDriver"
+			  url="jdbc:cubrid:211.241.199.216:30000:push50:::"
+			  connectionProperties=""
+			  maxActive="100"
+			  maxWaitMillis="10000"
+			  validationQuery="select 1;"
+			  removeAbandoned="true"
+			  logAbandoned="true"
+			  testWhileIdle="true"
+			  timeBetweenEvictionRunsMillis="60000"
+			  minEvictableIdleTimeMillis="300000" />
+-->
+</Context>

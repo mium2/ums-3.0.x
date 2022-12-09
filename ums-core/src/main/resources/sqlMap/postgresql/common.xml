@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.common">
+
+	<select id="getAllPushService" parameterType="java.lang.String" resultType="hashmap">
+		<![CDATA[
+		SELECT 
+			"SERVICENAME", 	"SERVICECODE", 		"MAXRETRYCNT", 	"RETRYFLAG", 
+			"RESENDFLAG",	 "MAXRESENDCNT", 	"PNSID", 		"FAILSMSFLAG"
+		FROM 
+			"T_PUSH_SERVICE"
+		]]>
+	</select>
+	
+	<select id="selMsgTypeList" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			'정보' AS text, 
+			'I' val
+		UNION ALL
+		SELECT 
+			'광고' AS text, 
+			'A' val
+	</select>
+	
+	<select id="selCallBackNum" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			"SENDER_NAME", "SENDER_NUM" 
+		FROM 
+			"T_UMS_SMS_SENDER"
+	</select>
+
+	<select id="selSearchAllMember" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+		<![CDATA[
+		SELECT 
+			"MEMBERID","MEMBERNAME","MOBILE"
+		FROM 
+			"T_UMS_MEMBER"
+		]]>
+		<where>
+			<if test="SEARCHKEY1 !=null">
+				"${SEARCHKEY1}" LIKE '%' ||  #{SEARCHVAR1} || '%'
+			</if>
+			<if test="SEARCHKEY2 !=null">
+				AND "${SEARCHKEY2}" LIKE '%' ||  #{SEARCHVAR2} || '%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="selMacroCode" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			"MACROCODE", "MACRO_ORDER" 
+		FROM 
+			"T_UMS_MACROCODE" 
+		WHERE "USE_YN" = 'Y'
+	</select>
+
+	<select id="selKkoInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			"CONFIG"
+		FROM 
+			"T_UMS_CHANNEL_CONFIG"
+		WHERE 
+			"CHANNEL_CODE" = 'KKOALT'
+	</select>
+
+	<select id="selectAllPreventUsers" parameterType="hashmap" resultType="kr.uracle.ums.core.service.bean.PreventUserBean">
+        SELECT 
+        	"SEQNO" AS "USERSEQNO",	"MEMBER_ID" AS "USERID", 	"MEMBER_NAME" AS "USERNAME",
+        	"MOBILE",				"APP_ID" AS "APPID", 		"CHANNEL" AS "REJECTCHANNEL", 
+        	"REG_ID",				"REG_DATE" AS "REG_DT", 	"MOD_DATE" AS "MOD_DT"  	
+        FROM 
+        	"T_UMS_UNSUBSCRIBE_MEMBER"
+        ORDER BY "SEQNO" DESC
+    </select>
+    
+        <select id="selectChannelSendRatio"  parameterType="hashmap" resultType="kr.uracle.ums.core.vo.setting.ProviderVo">
+        SELECT 
+        	"CHANNEL_SUB_CODE" AS "CHANNEL", "PROVIDER", "RATIO"
+        FROM 
+        	"T_UMS_COM_SEND_RATIO"
+        WHERE
+        	"CHANNEL_SUB_CODE" = #{CHANNEL}
+        AND
+        	"USE_YN" = 'Y'
+        ORDER BY "CHANNEL_SUB_CODE" DESC, "RATIO" DESC
+    </select>
+	
+    <select id="selectAllSendRatio" resultType="kr.uracle.ums.core.vo.setting.ProviderVo">
+        SELECT 
+        	"CHANNEL_SUB_CODE" AS "CHANNEL", "PROVIDER", "RATIO"
+        FROM 
+        	"T_UMS_COM_SEND_RATIO"
+        WHERE
+        	USE_YN = 'Y'
+        ORDER BY "CHANNEL_SUB_CODE" DESC, "RATIO" DESC
+    </select>
+
+	<select id="selectFatigue" parameterType="hashmap" resultType="hashmap">
+        SELECT 
+        	"CONFIG"
+        FROM 
+        	"T_UMS_CONFIG"
+        WHERE 
+        	"KEY" = 'FATIGUE_POLICY'
+    </select>
+
+	<select id="selMtsNaverInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			"TMPL_CD",			"TMPL_ID",		"PARTNERKEY",
+			"NAVER_PROFILE",	"CATEGORYCODE",	"TEMPL_STATUS",
+			"TEMPL_SEND_STATUS"
+		FROM 
+			"T_UMS_NAVER_TEMPL"
+	</select>
+	
+    <select id="selKeyWords" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			"WORD"
+		FROM 
+			"T_UMS_FILTER_WORDS"
+		WHERE
+			"TYPE" = #{KEYWORD}
+	</select>
+	
+	<select id="selSendNums" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			"CONFIG"
+		FROM 
+			"T_UMS_CHANNEL_CONFIG"
+		WHERE
+			"CONFIG" IS NOT NULL
+		AND
+			"CHANNEL_CODE" = #{CHANNEL_CODE}			
+	</select>	
+
+	<select id="selChannelList" resultType="java.lang.String">
+		SELECT 
+			"CHANNEL_CODE" 
+		FROM 
+			"T_UMS_CHANNEL"
+		GROUP BY "CHANNEL_CODE"
+	</select>
+</mapper>

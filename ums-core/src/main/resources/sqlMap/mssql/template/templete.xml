@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.templete">
+	<sql id="head">
+		WITH
+		PAGE_INFO AS
+		(
+		SELECT CONVERT(integer, #{pageSize}) PAGE_SIZE
+		, CONVERT(integer, #{pageNum}) PAGE_NUM
+		)
+		, LST AS
+		(
+		SELECT *
+		,		ROW_NUMBER() OVER (ORDER BY PAGE_KEY) RNUM
+		FROM
+		(
+	</sql>
+
+	<!--  tail of paging query  -->
+	<sql id="bottom">
+		) A
+		)
+		SELECT TOP (SELECT PAGE_SIZE FROM PAGE_INFO) *
+		, (SELECT COUNT(1) FROM LST) TOT_CNT
+		FROM LST
+		WHERE	PAGE_KEY NOT IN
+		(
+		SELECT TOP (((SELECT PAGE_NUM FROM PAGE_INFO)  - 1) * (SELECT PAGE_SIZE FROM PAGE_INFO) ) PAGE_KEY
+		FROM LST
+		)
+	</sql>
+
+	<select id="selectTemplate" parameterType="hashmap" resultType="hashmap">
+		<if test="pageNum != null"><include refid="head"/></if>
+		SELECT
+		T1.TEMPL_ID
+		,T1.TEMPL_NAME
+		,T1.TEMPL_CONT
+		,T1.VARS
+		,T1.REG_ID
+		,CONVERT(CHAR(19),T1.REG_DT, 20) AS REG_DT
+		,CONVERT(CHAR(10),T1.REG_DT, 102) AS REG_DT_YMD
+		,CONVERT(CHAR(5),T1.REG_DT, 108) AS REG_DT_HM
+		,T1.MOD_ID
+		,CONVERT(CHAR(19),T1.MOD_DT, 20) AS MOD_DT
+		,0 AS CHECK_VAL
+		,T1.TITLE
+		,T1.C_TYPE
+		,T1.IMAGE_FILE
+		,T1.IMAGE_URL
+		,T1.VIDIO_URL
+		,T1.PLUS_ID
+		,T1.BUTTONS
+		,ROW_NUMBER() OVER(ORDER BY T1.REG_DT DESC) PAGE_KEY
+		FROM T_UMS_TEMPL T1
+		<if test="templeteName == null">
+			WHERE T1.S_TYPE = #{sType}
+		</if>
+		<if test="templeteName != null and templeteName != ''">
+			WHERE T1.TEMPL_NAME = #{templeteName}
+		</if>
+		<if test="startDt != null and endDt != null">
+			AND T1.REG_DT BETWEEN CONVERT(DATETIME,#{startDt}) AND CONVERT(DATETIME,#{endDt})
+		</if>
+		<if test="searchValue != null and searchValue != ''">
+			<if test="searchType != ''">
+				AND T1.${searchType} LIKE '%'+#{searchValue}+'%'
+			</if>
+			<if test="searchType == ''">
+				AND (
+				T1.TEMPL_ID LIKE '%'+#{searchValue}+'%'
+				OR T1.TEMPL_NAME LIKE '%'+#{searchValue}+'%'
+				)
+			</if>
+		</if>
+		<if test="cType != null and cType != ''">
+			AND T1.C_TYPE = #{cType}
+		</if>
+		<if test="pageNum != null"><include refid="bottom"/></if>
+	</select>
+
+	<select id="selExcelDownCnt" parameterType="hashmap" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS CNT
+		FROM T_UMS_TEMPL T1
+		<if test="templeteName == null">
+			WHERE T1.S_TYPE = #{sType}
+		</if>
+		<if test="templeteName != null and templeteName != ''">
+			WHERE T1.TEMPL_NAME = #{templeteName}
+		</if>
+		<if test="startDt != null and endDt != null">
+			AND T1.REG_DT BETWEEN CONVERT(DATETIME,#{startDt}) AND CONVERT(DATETIME,#{endDt})
+		</if>
+		<if test="searchValue != null and searchValue != ''">
+			<if test="searchType != ''">
+				AND T1.${searchType} LIKE '%'+#{searchValue}+'%'
+			</if>
+			<if test="searchType == ''">
+				AND (
+				T1.TEMPL_ID LIKE '%'+#{searchValue}+'%'
+				OR T1.TEMPL_NAME LIKE '%'+#{searchValue}+'%'
+				)
+			</if>
+		</if>
+		<if test="cType != null and cType != ''">
+			AND T1.C_TYPE = #{cType}
+		</if>
+	</select>
+
+	<select id="selExcelDownList" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		T1.TEMPL_ID
+		,T1.TEMPL_NAME
+		,T1.TEMPL_CONT
+		,T1.VARS
+		,T1.REG_ID
+		,CONVERT(CHAR(19),T1.REG_DT, 20) AS REG_DT
+		,T1.MOD_ID
+		,CONVERT(CHAR(19),T1.MOD_DT, 20) AS MOD_DT
+		,0 AS CHECK_VAL
+		,T1.TITLE
+		,T1.C_TYPE
+		,T1.IMAGE_FILE
+		,T1.IMAGE_URL
+		,T1.VIDIO_URL
+		,T1.PLUS_ID
+		,T1.BUTTONS
+		FROM T_UMS_TEMPL T1
+		<if test="templeteName == null">
+			WHERE T1.S_TYPE = #{sType}
+		</if>
+		<if test="templeteName != null and templeteName != ''">
+			WHERE T1.TEMPL_NAME = #{templeteName}
+		</if>
+		<if test="startDt != null and endDt != null">
+			AND T1.REG_DT BETWEEN CONVERT(DATETIME,#{startDt}) AND CONVERT(DATETIME,#{endDt})
+		</if>
+		<if test="searchValue != null and searchValue != ''">
+			<if test="searchType != ''">
+				AND T1.${searchType} LIKE '%'+#{searchValue}+'%'
+			</if>
+			<if test="searchType == ''">
+				AND (
+				T1.TEMPL_ID LIKE '%'+#{searchValue}+'%'
+				OR T1.TEMPL_NAME LIKE '%'+#{searchValue}+'%'
+				)
+			</if>
+		</if>
+		<if test="cType != null and cType != ''">
+			AND T1.C_TYPE = #{cType}
+		</if>
+		ORDER BY T1.REG_DT DESC
+	</select>
+
+	<insert id="insertTemplate" parameterType="hashmap">
+		INSERT INTO T_UMS_TEMPL (
+			TEMPL_NAME
+			,TEMPL_CONT
+		<if test="strVars != null">
+			,VARS
+		</if>
+			,REG_ID
+			,REG_DT
+			,MOD_ID
+			,MOD_DT
+			,S_TYPE
+			,C_TYPE
+		<if test="title != null and title != ''">
+			,TITLE
+		</if>
+		<if test="imgFile != null and imgFile != ''">
+			,IMAGE_FILE
+		</if>
+		<if test="imgUrl != null and imgUrl != ''">
+			,IMAGE_URL
+		</if>
+		<if test="vidioUrl != null and vidioUrl != ''">
+			,VIDIO_URL
+		</if>
+		<if test="plusId != null and plusId != ''">
+			,PLUS_ID
+		</if>
+		<if test="strButtons != null and strButtons != ''">
+			,BUTTONS
+		</if>
+		<if test="buttonLink1 != null">
+			,BUTTON_LINK1
+		</if>
+		<if test="buttonLink2 != null">
+			,BUTTON_LINK2
+		</if>
+		<if test="buttonLink3 != null">
+			,BUTTON_LINK3
+		</if>
+		<if test="buttonLink4 != null">
+			,BUTTON_LINK4
+		</if>
+		<if test="buttonLink5 != null">
+			,BUTTON_LINK5
+		</if>
+		) VALUES (
+			#{templeteName}
+			,#{templeteContet}
+		<if test="strVars != null">
+			,#{strVars}
+		</if>
+			,#{regId}
+			, GETDATE()
+			,#{regId}
+			, GETDATE()
+			,#{sType}
+			,#{cType}
+		<if test="title != null and title != ''">
+			,#{title}
+		</if>
+		<if test="imgFile != null and imgFile != ''">
+			,#{imgFile}
+		</if>
+		<if test="imgUrl != null and imgUrl != ''">
+			,#{imgUrl}
+		</if>
+		<if test="vidioUrl != null and vidioUrl != ''">
+			,#{vidioUrl}
+		</if>
+		<if test="plusId != null and plusId != ''">
+			,#{plusId}
+		</if>
+		<if test="strButtons != null and strButtons != ''">
+			,#{strButtons}
+		</if>
+		<if test="buttonLink1 != null">
+			,#{buttonLink1}
+		</if>
+		<if test="buttonLink2 != null">
+			,#{buttonLink2}
+		</if>
+		<if test="buttonLink3 != null">
+			,#{buttonLink3}
+		</if>
+		<if test="buttonLink4 != null">
+			,#{buttonLink4}
+		</if>
+		<if test="buttonLink5 != null">
+			,#{buttonLink5}
+		</if>
+		)
+	</insert>
+	<update id="updateTemplate" parameterType="hashmap">
+		UPDATE T_UMS_TEMPL
+		SET  MOD_ID = #{modId}
+			,MOD_DT =  GETDATE()
+		<if test="templeteName != null">
+			,TEMPL_NAME = #{templeteName}
+		</if>
+		<if test="templeteContet != null">
+			,TEMPL_CONT = #{templeteContet}
+		</if>
+		<if test="strVars != null">
+			,VARS = #{strVars}
+		</if>
+		<if test="title != null">
+			,TITLE = #{title}
+		</if>
+		<if test="cType != null">
+			,C_TYPE = #{cType}
+		</if>
+		<if test="imgFile != null and imgFile != ''">
+			,IMAGE_FILE = #{imgFile}
+		</if>
+		<if test="imgUrl != null and imgUrl != ''">
+			,IMAGE_URL = #{imgUrl}
+		</if>
+		<if test="vidioUrl != null and vidioUrl != ''">
+			,VIDIO_URL = #{vidioUrl}
+		</if>
+		<if test="plusId != null and plusId != ''">
+			,PLUS_ID = #{plusId}
+		</if>
+		<if test="strButtons != null and strButtons != ''">
+			,BUTTONS = #{strButtons}
+		</if>
+		<if test="buttonLink1 != null">
+			,BUTTON_LINK1 = #{buttonLink1}
+		</if>
+		<if test="buttonLink2 != null">
+			,BUTTON_LINK2 = #{buttonLink2}
+		</if>
+		<if test="buttonLink3 != null">
+			,BUTTON_LINK3 = #{buttonLink3}
+		</if>
+		<if test="buttonLink4 != null">
+			,BUTTON_LINK4 = #{buttonLink4}
+		</if>
+		<if test="buttonLink5 != null">
+			,BUTTON_LINK5 = #{buttonLink5}
+		</if>
+		WHERE TEMPL_ID	= #{templId}
+		  AND S_TYPE	= #{sType}
+	</update>
+	<delete id="deleteTemplate" parameterType="hashmap">
+		DELETE FROM T_UMS_TEMPL
+		WHERE S_TYPE = #{sType}
+		  AND TEMPL_ID IN
+		<foreach item="item" index="index" collection="templIds" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="selTemplateForCache" parameterType="hashmap" resultType="kr.uracle.ums.core.vo.template.CommonTemplateVo">
+		SELECT TEMPL_ID
+			,TEMPL_NAME
+			,TEMPL_CONT
+			,VARS
+			,S_TYPE
+			,C_TYPE
+			,REG_ID
+			,MOD_ID
+			,TITLE
+			,EXT
+			,IMAGE_FILE
+			,IMAGE_URL
+			,VIDIO_URL
+			,PLUS_ID
+			,BUTTONS
+			,BUTTON_LINK1
+			,BUTTON_LINK2
+			,BUTTON_LINK3
+			,BUTTON_LINK4
+			,BUTTON_LINK5
+		FROM T_UMS_TEMPL
+		WHERE TEMPL_ID = #{TEMPL_ID}
+	</select>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.sms.lgu">
+    <!-- ETC6 정보 : {"CLOUD_SERVICE_ID":"0192c926a0bd4f089d7f3c79df17991e","PROJECT_SERVICE_ID":"1234567","PRICE_RATE":"AA"}-->
+    <insert id="inSmsSend" parameterType="kr.uracle.ums.codec.redis.vo.sms.LguSmsProcessBean">
+        <![CDATA[
+        insert into SC_TRAN(TR_SENDDATE, TR_ID, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG, TR_ETC1, TR_ETC2, TR_ETC3)
+        values(now(), #{UMS_SENDMSG_SEQNO}, #{TR_SENDSTAT}, #{TR_MSGTYPE}, #{TR_PHONE}, #{TR_CALLBACK}, #{SMS_MSG}, #{TR_ETC1}, #{TR_ETC2}, #{TR_ETC3})
+        ]]>
+        <selectKey keyProperty="TR_NUM" resultType="long">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.friendtolk.lotte">
+
+    <insert id="inFrtSendMsg" parameterType="kr.uracle.ums.codec.redis.vo.kko.LotteKkoFrtProcessBean">
+        <![CDATA[
+        INSERT INTO kmp_msg(
+            "CMID",			    	"MSG_TYPE",        		"STATUS",
+            "REQUEST_TIME",	        "SEND_TIME",	        "DEST_PHONE",
+            "DEST_NAME",	        "SEND_PHONE",		    "SEND_NAME",
+            "TITLE",	        	"MSG_BODY",	        	"NATION_CODE",
+            "SENDER_KEY",	        "TIMEOUT",              "KKO_JSON",
+            "USER1",	        	"USER2",                "ATTACHED_FILE",
+            "WIDE",                 "AD_FLAG",              "MKT_FLAG",
+            "USER9"
+        )
+        VALUES(
+            #{CMID},			    #{MSG_TYPE},        		#{STATUS},
+            NOW(),	        	    NOW(),		        	    #{MOBILE_NUM},
+            #{DEST_NAME},	        #{CALLBACK_NUM},	        #{SEND_NAME},
+            #{TITLE},	        	#{MSG_BODY},	        	#{NATION_CODE},
+            #{SERVICE_ID},	        #{TIMEOUT},                 #{KKO_JSON},
+            #{USER1},	        	#{USER2},                   #{ATTACHED_FILE},
+            #{WIDE},                #{AD_FLAG},                 #{MKT_FLAG},
+            #{TRANSACTION_KEY}
+        )
+        ]]>
+    </insert>
+
+    <insert id="inFrtSendMsgDynamic" parameterType="kr.uracle.ums.codec.redis.vo.kko.LotteKkoFrtProcessBean">
+        <![CDATA[
+        INSERT INTO ${TABLE_NAME}(
+            "CMID",			    	"MSG_TYPE",        		"STATUS",
+            "REQUEST_TIME",	        "SEND_TIME",	        "DEST_PHONE",
+            "DEST_NAME",	        "SEND_PHONE",		    "SEND_NAME",
+            "TITLE",	        	"MSG_BODY",	        	"NATION_CODE",
+            "SENDER_KEY",	        "TIMEOUT",              "KKO_JSON",
+            "USER1",	        	"USER2",                "ATTACHED_FILE",
+            "WIDE",                 "AD_FLAG",              "MKT_FLAG",
+            "USER9"
+        )
+        VALUES(
+            #{CMID},			    #{MSG_TYPE},        		#{STATUS},
+            NOW(),	        	    NOW(),		        	    #{MOBILE_NUM},
+            #{DEST_NAME},	        #{CALLBACK_NUM},	        #{SEND_NAME},
+            #{TITLE},	        	#{MSG_BODY},	        	#{NATION_CODE},
+            #{SERVICE_ID},	        #{TIMEOUT},                 #{KKO_JSON},
+            #{USER1},	        	#{USER2},                   #{ATTACHED_FILE},
+            #{WIDE},                #{AD_FLAG},                 #{MKT_FLAG},
+            #{TRANSACTION_KEY}
+        )
+        ]]>
+    </insert>
+</mapper>

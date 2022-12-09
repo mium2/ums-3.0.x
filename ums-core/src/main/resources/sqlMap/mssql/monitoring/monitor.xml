@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.monitor">
+    <select id="selUmsServerInfo" parameterType="kr.uracle.ums.core.vo.monitor.MonitorServerVo" resultType="java.lang.Integer">
+      <![CDATA[
+        SELECT COUNT(*) AS CNT
+        FROM T_UMS_MONITOR_SERVER
+        WHERE SERVERID=#{SERVERID}
+        ]]>
+    </select>
+    <insert id="inUmsServerInfo" parameterType="kr.uracle.ums.core.vo.monitor.MonitorServerVo">
+        <![CDATA[
+        INSERT INTO T_UMS_MONITOR_SERVER(
+            SERVERID,GROUPID,SERVERTYPE,SERVERNAME,MONITOR_URL,ISACTIVE
+        ) VALUES (
+            #{SERVERID},#{GROUPID},#{SERVERTYPE},#{SERVERNAME},#{MONITOR_URL},#{ISACTIVE}
+        )
+        ]]>
+    </insert>
+    <insert id="upUmsServerInfo" parameterType="kr.uracle.ums.core.vo.monitor.MonitorServerVo">
+        <![CDATA[
+        UPDATE T_UMS_MONITOR_SERVER
+        SET
+            GROUPID=#{GROUPID}, SERVERTYPE=#{SERVERTYPE}, SERVERNAME=#{SERVERNAME}, MONITOR_URL=#{MONITOR_URL}, ISACTIVE=#{ISACTIVE}
+        WHERE SERVERID=#{SERVERID}
+        ]]>
+    </insert>
+
+</mapper>

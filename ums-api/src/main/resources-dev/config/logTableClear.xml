@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<batch>
+	<job>
+		<table>T_UMS_SEND_REAL</table>
+		<month>6</month>
+		<use_yn>Y</use_yn>
+	</job>
+	<job>
+		<table>T_UMS_SEND_BATCH</table>
+		<month>6</month>
+		<use_yn>Y</use_yn>
+	</job>
+	<job>
+		<table>T_PUSH_MSG_RECV_MASTER</table>
+		<month>6</month>
+		<use_yn>Y</use_yn>
+	</job>
+	<job>
+		<table>T_UMS_PROCESSORINFO</table>
+		<month>6</month>
+		<base_col>STARTTIME</base_col>
+		<base_col_type>DATE</base_col_type>
+		<use_yn>Y</use_yn>
+	</job>
+	<job>
+		<table>T_UMS_SEND_STATISTICS</table>
+		<month>12</month>
+		<base_col>SENDDATE</base_col>
+		<base_col_type>VARCHAR</base_col_type>
+		<use_yn>Y</use_yn>
+	</job>
+	<job>
+		<table>T_UMS_CUSTOM_RESULT</table>
+		<month>1</month>
+		<base_col>MOD_DATE</base_col>
+		<base_col_type>DATE</base_col_type>
+		<use_yn>Y</use_yn>
+	</job>
+	<job>
+		<table>T_UMS_EDOC_LOG</table>
+		<month>6</month>
+		<base_col>REGDATE</base_col>
+		<base_col_type>DATE</base_col_type>
+		<use_yn>Y</use_yn>
+	</job>
+</batch>

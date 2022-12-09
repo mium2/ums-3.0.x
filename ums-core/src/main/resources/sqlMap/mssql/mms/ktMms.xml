@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mms.kt">
+    <insert id="inMmsSend" parameterType="kr.uracle.ums.codec.redis.vo.mms.KtMmsProcessBean">
+        <![CDATA[
+        INSERT INTO SDK_MMS_SEND(
+USER_ID,
+SCHEDULE_TYPE,
+SUBJECT,
+NOW_DATE,
+SEND_DATE,
+CALLBACK,
+DEST_COUNT,
+DEST_INFO,
+MMS_MSG,
+CONTENT_COUNT,
+CONTENT_DATA,
+KT_OFFICE_CODE,
+CDR_ID,
+RESERVED1,
+RESERVED2,
+RESERVED3,
+RESERVED4,
+RESERVED5,
+RESERVED6,
+SEND_STATUS,
+SEND_COUNT,
+SEND_RESULT,
+MSG_TYPE,
+STD_ID)
+        VALUES(
+#{USER_ID},
+#{SCHEDULE_TYPE},
+#{SUBJECT},
+#{NOW_DATE},
+#{SEND_DATE},
+#{CALLBACK},
+#{DEST_COUNT},
+#{DEST_INFO},
+#{MMS_MSG},
+#{CONTENT_COUNT},
+#{CONTENT_DATA},
+#{KT_OFFICE_CODE},
+#{CDR_ID},
+#{CNAME},
+#{START_SEND_TYPE},
+#{UMS_SENDMSG_SEQNO},
+#{SENDERID},
+#{SENDGROUPCODE},
+#{CUID},
+#{SEND_STATUS},
+#{SEND_COUNT},
+#{SEND_RESULT},
+#{MSG_TYPE},
+#{UMS_SENDMSG_SEQNO})
+        ]]>
+        <selectKey keyProperty="MSG_ID" resultType="long">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <insert id="inFromMmsToSmsSendMsg" parameterType="kr.uracle.ums.codec.redis.vo.mms.KtMmsProcessBean">
+        <![CDATA[
+        INSERT INTO SDK_SMS_SEND(
+USER_ID,
+SCHEDULE_TYPE,
+SUBJECT,
+NOW_DATE,
+SEND_DATE,
+CALLBACK,
+DEST_COUNT,
+DEST_INFO,
+SMS_MSG,
+KT_OFFICE_CODE,
+CDR_ID,
+RESERVED1,
+RESERVED2,
+RESERVED3,
+RESERVED4,
+RESERVED5,
+RESERVED6,
+SEND_STATUS,
+SEND_COUNT,
+SEND_RESULT)
+        VALUES(
+#{USER_ID},
+#{SCHEDULE_TYPE},
+#{SUBJECT},
+#{NOW_DATE},
+#{SEND_DATE},
+#{CALLBACK},
+#{DEST_COUNT},
+#{DEST_INFO},
+#{MMS_MSG},
+#{KT_OFFICE_CODE},
+#{CDR_ID},
+#{CNAME},
+#{START_SEND_TYPE},
+#{UMS_SENDMSG_SEQNO},
+#{SENDERID},
+#{SENDGROUPCODE},
+#{CUID},
+#{SEND_STATUS},
+#{SEND_COUNT},
+#{SEND_RESULT})
+        ]]>
+        <selectKey keyProperty="MSG_ID" resultType="long">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+</mapper>

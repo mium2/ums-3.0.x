@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+
+    <property name="LOG_DIR" value="/Users/byungheeyoo/project/ums/uracle-ums/trunk/logs" />
+
+    <appender name="SERVER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--매우중요! 아래의 디렉토리에 시스템 발송이력 저장됨-->
+            <fileNamePattern>${LOG_DIR}/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>12</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%-5level]%d{yyyy-MM-dd HH:mm:ss} %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="asyncSERVER" class="ch.qos.logback.classic.AsyncAppender">
+        <!--
+          Queue의 크기중에 비어있는 부분이 discardingThreshold 비율 이하인 경우 INFO 레벨 이하의 로그는 저장하지 않는다.
+          모든 로그 이벤트를 처리하기 위해서는 0으로 discardingThreshold을 설정합니다
+           -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 큐의 최대 용량. 기본적으로 QUEUESIZE는 256으로 설정됩니다. -->
+        <queueSize>1024</queueSize>
+        <!-- 해당 로그 이벤트 정보를 Queue에 추가하는 시점에 로그를 호출한 정보 (callerData)를 추출할지 여부를 결정하는 속성-->
+        <includeCallerData>false</includeCallerData>
+        <!--queue에 가득차게 되는 경우 다른 쓰레드의 작업들이 blocking 상태에 빠지게 되는데 해당 옵션을 true하게 되면 blocking 상태에 빠지지 않고 log를 drop하며 계속 진행할 수 있게 해준다.-->
+        <neverBlock>true</neverBlock>
+        <!--
+        (밀리 초) 큐의 최대 flush timeout 시간을 지정합니다.처리 할 수​​없는 이벤트가 삭제됩니다.
+        <maxFlushTime>int</maxFlushTime>
+         -->
+        <appender-ref ref="SERVER" />
+    </appender>
+
+    <appender name="DBERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--매우중요! 아래의 디렉토리에 시스템 발송이력 저장됨-->
+            <fileNamePattern>${LOG_DIR}/db/sendDetail.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>12</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="sentToRedis" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--매우중요! 아래의 디렉토리에 시스템 발송이력 저장됨-->
+            <fileNamePattern>${LOG_DIR}/redis/reqSentRedis.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>12</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%-5level]%d{yyyy-MM-dd HH:mm:ss},%msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="asynSentToRedis" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>4096</queueSize>
+        <includeCallerData>false</includeCallerData>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="sentToRedis" />
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+        </layout>
+    </appender>
+    <appender name="asyncSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>1024</queueSize>
+        <includeCallerData>false</includeCallerData>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="STDOUT" />
+    </appender>
+
+
+    <appender name="AMSOFT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--매우중요! 아래의 디렉토리에 시스템 발송이력 저장됨-->
+            <fileNamePattern>${LOG_DIR}/am/am.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss},%msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="dbErrorLogger">
+        <level value="INFO"/>
+        <appender-ref ref="DBERROR" />
+    </logger>
+
+    <logger name="amSoftLogger">
+        <level value="INFO"/>
+        <appender-ref ref="AMSOFT" />
+    </logger>
+
+    <logger name="sentRedisLogger">
+        <level value="INFO"/>
+        <appender-ref ref="sentToRedis" />
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="INFO"/>
+        <appender-ref ref="asyncSERVER" />
+    </logger>
+
+    <logger name="mybatis">
+        <level value="INFO"/>
+        <appender-ref ref="asyncSERVER" />
+    </logger>
+
+    <logger name="kr.uracle.ums">
+        <level value="DEBUG"/>
+        <appender-ref ref="asyncSERVER" />
+    </logger>
+
+
+
+    <!--
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT" />
+    </root>
+    -->
+</configuration>
+        

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.sample">
+	<select id="selectAllPreventUsers" parameterType="hashmap" resultType="kr.uracle.ums.core.service.bean.PreventUserBean">
+        SELECT 
+        	SEQNO AS USERSEQNO, 	MEMBER_ID AS USERID, 	MEMBER_NAME AS USERNAME,
+        	MOBILE,					APP_ID AS APPID, 		CHANNEL AS REJECTCHANNEL, 
+        	REG_ID,					REG_DATE AS REG_DT, 	MOD_DATE AS MOD_DT 	
+        FROM 
+        	T_UMS_UNSUBSCRIBE_MEMBER
+        ORDER BY SEQNO DESC
+    </select>
+    
+
+</mapper>

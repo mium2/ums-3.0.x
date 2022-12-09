@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.sms.lgu">
+
+    <insert id="inSmsSend" parameterType="kr.uracle.ums.codec.redis.vo.sms.LguSmsProcessBean">
+        <![CDATA[
+		INSERT INTO SC_TRAN(
+			TR_SENDDATE, 	    TR_ID,
+			TR_SENDSTAT, 		TR_MSGTYPE, 	TR_PHONE, 
+			TR_CALLBACK, 		TR_MSG, 		TR_ETC6
+		)	
+        VALUES(	
+			NOW(),	 		    #{MASTERTABLE_SEQNO},
+			#{TR_SENDSTAT}, 	#{TR_MSGTYPE}, 	        #{MOBILE_NUM},
+			#{CALLBACK_NUM}, 	#{MSG_BODY}, 	        #{TRANSACTION_KEY}
+		)        
+		]]>
+    </insert>
+    <insert id="inSmsSendDynamic" parameterType="kr.uracle.ums.codec.redis.vo.sms.LguSmsProcessBean">
+        <![CDATA[
+		INSERT INTO SC_TRAN(
+			TR_SENDDATE, 	    TR_ID,
+			TR_SENDSTAT, 		TR_MSGTYPE, 	TR_PHONE,
+			TR_CALLBACK, 		TR_MSG, 		TR_ETC6
+		)
+        VALUES(
+			NOW(),	 		    #{MASTERTABLE_SEQNO},
+			#{TR_SENDSTAT}, 	#{TR_MSGTYPE}, 	        #{MOBILE_NUM},
+			#{CALLBACK_NUM}, 	#{MSG_BODY}, 	        #{TRANSACTION_KEY}
+		)
+		]]>
+    </insert>
+
+    <insert id="inMmsSend" parameterType="kr.uracle.ums.codec.redis.vo.sms.LguSmsProcessBean">
+        <![CDATA[
+        INSERT INTO MMS_MSG(
+            SUBJECT, 			    PHONE,          	    CALLBACK,
+            STATUS, 			    REQDATE,        	    MSG,
+            EXPIRETIME,        	    TYPE,
+            ID,                     POST,           	    ETC6
+        )
+        VALUES(
+            #{TITLE},		        #{MOBILE_NUM},          #{CALLBACK_NUM},
+            '0',		            NOW(),              	#{MSG_BODY},
+            #{EXPIRETIME},          '0',
+            #{SENDERID},            #{SENDGROUPCODE},       #{TRANSACTION_KEY}
+        )
+        ]]>
+    </insert>
+    <insert id="inMmsSendDynamic" parameterType="kr.uracle.ums.codec.redis.vo.sms.LguSmsProcessBean">
+        <![CDATA[
+        INSERT INTO ${TABLE_NAME}(
+            SUBJECT, 			    PHONE,          	    CALLBACK,
+            STATUS, 			    REQDATE,        	    MSG,
+            EXPIRETIME,        	    TYPE,
+            ID,                     POST,           	    ETC6
+        )
+        VALUES(
+            #{TITLE},		        #{MOBILE_NUM},          #{CALLBACK_NUM},
+            '0',		            NOW(),              	#{MSG_BODY},
+            #{EXPIRETIME},          '0',
+            #{SENDERID},            #{SENDGROUPCODE},       #{TRANSACTION_KEY}
+        )
+        ]]>
+    </insert>
+</mapper>

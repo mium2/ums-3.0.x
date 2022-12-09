@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.monitor">
+	<select id="selUmsServerInfo" parameterType="kr.uracle.ums.core.vo.monitor.MonitorServerVo" resultType="java.lang.Integer">
+      <![CDATA[
+        SELECT 
+        	COUNT(*) AS "CNT"
+        FROM 
+        	T_UMS_MONITOR_SERVER
+        WHERE 
+        	SERVERID = #{SERVERID}
+        ]]>
+    </select>
+	<insert id="inUmsServerInfo" parameterType="kr.uracle.ums.core.vo.monitor.MonitorServerVo">
+        <![CDATA[
+        INSERT INTO T_UMS_MONITOR_SERVER(
+            SERVERID,		GROUPID,		SERVERTYPE,
+            SERVERNAME,	MONITOR_URL,	ISACTIVE
+        ) VALUES (
+            #{SERVERID},	#{GROUPID},		#{SERVERTYPE},
+            #{SERVERNAME},	#{MONITOR_URL},	#{ISACTIVE}
+        )
+        ]]>
+    </insert>
+	<insert id="upUmsServerInfo" parameterType="kr.uracle.ums.core.vo.monitor.MonitorServerVo">
+        <![CDATA[
+        UPDATE 
+        	T_UMS_MONITOR_SERVER
+        SET
+            GROUPID = #{GROUPID}, 
+            SERVERTYPE = #{SERVERTYPE}, 
+            SERVERNAME = #{SERVERNAME}, 
+            MONITOR_URL = #{MONITOR_URL}, 
+            ISACTIVE = #{ISACTIVE}
+        WHERE 
+        	SERVERID=#{SERVERID}
+        ]]>
+    </insert>
+
+    <!-- 프로그램 모니터링 정보 업데이트 및 저장	-->
+    <update id="updateDatas" parameterType="hashmap">
+	<![CDATA[
+		UPDATE 
+			T_UMS_COM_MONITORING
+		SET 
+			HISTROY_CHART1	=	#{HISTROY_CHART1},
+			HISTROY_CHART2	=	#{HISTROY_CHART2}, 
+			SUMMARY		=	#{SUMMARY},
+			UPT_ID 		= 	#{REQUESTER_ID},
+			UPDATE_DATE	=	NOW(),
+			UPDATE_MILITIME	=	#{UPDATE_MILITIME},
+			SERVER_NAME	=	#{SERVER_NAME}, 
+			MONITOR_URL	=	#{MONITOR_URL} 
+		WHERE 
+			PROGRAM_ID	= 	#{PROGRAM_ID}
+		AND SERVER_ID		=	#{SERVER_ID}
+	]]>
+    </update>
+    
+	<insert id="storeDatas" parameterType="hashmap">
+		<![CDATA[
+		INSERT INTO T_UMS_COM_MONITORING (
+			PROGRAM_ID, 		SERVER_ID, 		SERVER_NAME, 	MONITOR_URL, 
+			HISTROY_CHART1, 	HISTROY_CHART2, 	SUMMARY, 		REG_ID,
+			UPT_ID, 			REG_DATE, 		UPDATE_DATE,	UPDATE_MILITIME
+		)
+		VALUES(
+			#{PROGRAM_ID}, 		#{SERVER_ID}, 		#{SERVER_NAME}, 	#{MONITOR_URL}, 
+			#{HISTROY_CHART1}, 	#{HISTROY_CHART2}, 	#{SUMMARY}, 		#{REQUESTER_ID}, 
+			#{REQUESTER_ID},	NOW(), 				NOW(), 				#{UPDATE_MILITIME}
+		)
+		]]>
+    </insert>
+    
+    <!-- CHART 정보 가져오기		-->
+    <select id="getChartDatas" resultType="hashmap">
+      <![CDATA[
+        SELECT
+         	PROGRAM_ID AS "PROGRAM_ID", 							SERVER_ID AS "SERVER_ID", 		SERVER_NAME AS "SERVER_NAME", 		MONITOR_URL AS "MONITOR_URL", 
+			HISTROY_CHART1 AS "HISTROY_CHART", 	HISTROY_CHART2 AS "HISTROY_CHART2", 	REG_ID AS "REG_ID",			UPT_ID AS "UPT_ID", 		
+			REG_DATE AS "REG_DATE", 							UPDATE_DATE AS "UPDATE_DATE",		UPDATE_MILITIME AS "UPDATE_MILITIME"
+        FROM 
+        	T_UMS_COM_MONITORING
+        ]]>
+    </select>
+
+    <!-- SUMMARY 정보 가져오기		-->
+    <select id="getSummaryDatas" resultType="hashmap">
+      <![CDATA[
+        SELECT
+         	PROGRAM_ID AS "PROGRAM_ID", 	SERVER_ID AS "SERVER_ID", 		SERVER_NAME AS "SERVER_NAME", 		MONITOR_URL AS "MONITOR_URL", 
+			SUMMARY AS "SUMMARY",		REG_ID AS "REG_ID",			UPT_ID AS "UPT_ID", 		
+			REG_DATE AS "REG_DATE", 	UPDATE_DATE AS "UPDATE_DATE",		UPDATE_MILITIME AS "UPDATE_MILITIME"
+        FROM 
+        	T_UMS_COM_MONITORING
+        ]]>
+    </select>   
+
+</mapper>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.template.allimtolk.lgcns">
+
+    <update id="syncTemplate" parameterType="hashmap">
+        UPDATE 
+        	T_UMS_ALLIMTOK_TEMPL
+        SET  
+        	 MOD_DATE = SYSDATE
+        	,APPROVAL = #{approval}
+        <if test="templateContents != null">
+            ,TEMPLATECONTENTS = #{templateContents}
+        </if>
+        <if test="note != null">
+            ,NOTE = #{note}
+        </if>
+        <if test="senderKeyType != null">
+            ,SENDERKEYTYPE = #{senderKeyType}
+        </if>
+        <if test="buttons != null">
+            ,BUTTONS = #{buttons}
+        </if>
+        <if test="since != null">
+            ,SINCE = #{since}
+        </if>
+        <if test="kkoBizCodeNew != null">
+            ,KKOBIZCODE = #{kkoBizCodeNew}
+        </if>
+        <if test="kkoTemplateCode != null">
+            ,KKOTEMPLATECODE = #{kkoTemplateCode}
+        </if>
+        <if test="templateCode != null">
+            ,TEMPLATECODE = #{templateCode}
+        </if>
+        <if test="comments != null">
+            ,COMMENTS = #{comments}
+        </if>
+        WHERE KKOBIZCODE = #{kkoBizCode}
+    </update>
+
+
+    <update id="syncTemplate2" parameterType="hashmap">
+		UPDATE 
+			T_UMS_ALLIMTOK_TEMPL
+		SET  
+			 APPROVAL = #{approval}
+			,SINCE = #{since}
+			,COMMENTS = #{comments}
+			,MOD_DATE = SYSDATE
+		WHERE 
+			KKOBIZCODE = #{kkoBizCode}
+	</update>
+
+    <insert id="insTemplateReg2" parameterType="kr.uracle.ums.core.vo.SyncAltTemplVo">
+		INSERT INTO T_UMS_ALLIMTOK_TEMPL(
+			 KKOBIZCODE,	NOTE,		TEMPLATECONTENTS,	SENDERKEYTYPE
+			,TEMPLATETYPE,	QCOMMENT,	BUTTONS,			VARS
+			,IMAGE,			TEMPL_TITLE,	TEMPL_ADD_TITLE,	TEMPL_ADD_CONTENT, 		TEMPL_CATEGORYCODE
+			,APPROVAL,		SINCE,		KKOTEMPLATECODE,	TEMPLATECODE
+			,COMMENTS,		PLUS_ID,	C_TYPE,				REG_DATE
+			,REG_ID,		MOD_DATE
+		)
+		VALUES (
+			 #{KKOBIZCODE},		#{NOTE},		#{TEMPLATECONTENTS},	#{SENDERKEYTYPE}
+			,#{TEMPLATETYPE},	#{QCOMMENT},	#{BUTTONS},				#{VARS}
+			,#{IMAGE},			#{TEMPL_TITLE},	#{TEMPL_ADD_TITLE},		#{TEMPL_ADD_CONTENT}, 		#{TEMPL_CATEGORYCODE}
+			,#{APPROVAL},		#{SINCE},		#{KKOTEMPLATECODE},		#{TEMPLATECODE}
+			,#{COMMENTS},		#{PLUS_ID},		#{C_TYPE},				SYSDATE
+			,'BATCH',			SYSDATE
+		)
+	</insert>
+
+    <update id="upTemplateReg2" parameterType="kr.uracle.ums.core.vo.SyncAltTemplVo">
+		UPDATE 
+			T_UMS_ALLIMTOK_TEMPL
+		SET  
+			 MOD_DATE = SYSDATE
+			,APPROVAL = #{APPROVAL}
+			,SINCE = #{SINCE}
+			,KKOBIZCODE = #{KKOBIZCODE}
+			,KKOTEMPLATECODE = #{KKOTEMPLATECODE}
+			,TEMPLATECODE = #{TEMPLATECODE}
+			,COMMENTS = #{COMMENTS}
+		WHERE 
+			KKOBIZCODE = #{KKOBIZCODE}
+	</update>
+
+    <update id="upRelease" parameterType="java.lang.String">
+		UPDATE 
+			T_UMS_ALLIMTOK_TEMPL 
+		SET  
+			APPROVAL = 'A' 
+		WHERE 
+			KKOBIZCODE=#{KKOBIZCODE}
+	</update>
+
+    <update id="upDelAltTempl" parameterType="hashmap">
+		UPDATE 
+			T_UMS_ALLIMTOK_TEMPL 
+		SET 
+			APPROVAL = 'D' 
+		WHERE 
+			KKOBIZCODE=#{KKOBIZCODE}
+	</update>
+
+    <select id="selDelTemplate" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			KKOBIZCODE 
+		FROM 
+			T_UMS_ALLIMTOK_TEMPL 
+		WHERE 
+			APPROVAL='D'
+	</select>
+</mapper>

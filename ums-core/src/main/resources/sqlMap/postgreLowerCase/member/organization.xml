@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.organ">
+    <sql id="head">
+        SELECT viewC.* FROM (
+			SELECT
+				(ROW_NUMBER() OVER()) AS "RNUM"
+				,COUNT(*) OVER() AS "TOT_CNT"
+				,viewB.*
+			FROM (SELECT viewA.* FROM (
+    </sql>
+
+    <sql id="bottom">
+        ) AS viewA
+        ) AS viewB
+        ) AS viewC
+        WHERE "RNUM" BETWEEN (CAST(#{pageNum} AS INTEGER) -1) * CAST(#{pageSize} AS INTEGER) + 1 AND CAST(#{pageNum} AS INTEGER) * CAST(#{pageSize} AS INTEGER)
+    </sql>
+
+    <select id="selOrganization" parameterType="hashMap" resultType="kr.uracle.ums.core.vo.setting.OrganizationVo">
+        <![CDATA[
+        SELECT 
+        	ORGANID AS "ORGANID", ORGANNAME AS "ORGANNAME",	P_ORGANID AS "P_ORGANID",	DEPTH AS "DEPTH",
+        	SORTNO AS "SORTNO",				USE_YN AS "USE_YN",		REGDATE AS "REGDATE"
+        FROM 
+        	T_UMS_ORGANIZATION
+        ORDER BY DEPTH ASC, SORTNO ASC, ORGANID ASC
+        ]]>
+    </select>
+
+    <select id="selChildOrgan" parameterType="hashMap" resultType="kr.uracle.ums.core.vo.setting.OrganizationVo">
+        <![CDATA[
+        SELECT 
+        	ORGANID AS "ORGANID",	ORGANNAME AS "ORGANNAME",	P_ORGANID AS "P_ORGANID",
+        	DEPTH AS "DEPTH",	SORTNO AS "SORTNO",		USE_YN AS "USE_YN",		
+        	REGDATE AS "REGDATE"
+        FROM 
+        	T_UMS_ORGANIZATION
+        WHERE 
+        	P_ORGANID=#{ORGANID}
+        ORDER BY DEPTH DESC, SORTNO ASC, ORGANID ASC
+        ]]>
+    </select>
+
+    <insert id="inOrganization" parameterType="kr.uracle.ums.core.vo.setting.OrganizationVo">
+        <![CDATA[
+        INSERT INTO T_UMS_ORGANIZATION(
+        	ORGANID,	ORGANNAME,	P_ORGANID,
+        	DEPTH,	SORTNO,		USE_YN,
+        	REGDATE
+        )
+        VALUES (
+        	#{ORGANID},	#{ORGANNAME},	#{P_ORGANID},
+        	#{DEPTH},	#{SORTNO},		#{USE_YN},
+        	NOW()
+        )
+        ]]>
+    </insert>
+
+    <select id="selRootDepthUser" parameterType="hashMap" resultType="hashMap">
+        <![CDATA[
+        SELECT 
+        	A.ORGANID AS "ORGANID", 		C.MEMBERID AS "MEMBERID",	
+        	C.MEMBERNAME AS "MEMBERNAME",		C.MOBILE AS "MOBILE"
+        FROM 
+        	T_UMS_ORGANIZATION AS A, 
+        	T_UMS_ORGANMEMBER AS B, 
+        	T_UMS_MEMBER AS C
+        WHERE 
+        	A.ORGANID = B.ORGANID
+        AND 
+        	B.MEMBERID = C.MEMBERID
+        AND 
+        	A.DEPTH<1
+        ORDER BY MEMBERNAME ASC
+        ]]>
+    </select>
+
+    <select id="selOneDepthUser" parameterType="hashMap" resultType="hashMap">
+        <![CDATA[
+        SELECT 
+        	A.ORGANID AS "ORGANID", 		C.MEMBERID AS "MEMBERID",	
+        	C.MEMBERNAME AS "MEMBERNAME",		C.MOBILE AS "MOBILE"
+        FROM 
+        	T_UMS_ORGANIZATION A, 
+        	T_UMS_ORGANMEMBER B, 
+        	T_UMS_MEMBER C
+        WHERE 
+        	A.ORGANID = B.ORGANID
+        AND 
+        	B.MEMBERID = C.MEMBERID
+        AND 
+        	A.DEPTH<2
+        ORDER BY MEMBERNAME ASC
+        ]]>
+    </select>
+
+    <select id="selOrganRegUser" parameterType="hashMap" resultType="hashMap">
+        <![CDATA[
+        SELECT 
+        	A.ORGANID AS "ORGANID", 		C.MEMBERID AS "MEMBERID",	
+        	C.MEMBERNAME AS "MEMBERNAME",		C.MOBILE AS "MOBILE"
+        FROM 
+        	T_UMS_ORGANIZATION  A, 
+        	T_UMS_ORGANMEMBER  B, 
+        	T_UMS_MEMBER  C
+        WHERE 
+        	A.ORGANID=B.ORGANID
+        AND 
+        	B.MEMBERID = C.MEMBERID
+        AND 
+        	A.ORGANID = #{ORGANID}
+        ORDER BY MEMBERNAME ASC
+        ]]>
+    </select>
+
+    <select id="selOrganCodeList" resultType="hashMap">
+        <![CDATA[
+        SELECT 
+        	ORGANID AS "ORGANID" 
+        FROM 
+        	T_UMS_ORGANIZATION
+        ]]>
+    </select>
+
+    <update id="upOrganizaion" parameterType="hashMap">
+        <![CDATA[
+        UPDATE 
+        	T_UMS_ORGANIZATION 
+        SET 
+        	ORGANNAME =#{ORGANNAME},
+        	SORTNO =#{SORTNO},
+        	REGDATE =SYSDATE 
+        WHERE 
+        	ORGANID = #{ORGANID}
+        ]]>
+    </update>
+
+    <select id="isExistOrganMember" parameterType="hashMap" resultType="java.lang.Integer">
+        <![CDATA[
+        SELECT 
+        	COUNT(*) AS "CNT "
+        FROM 
+        	T_UMS_ORGANMEMBER 
+        WHERE 
+        	ORGANID = #{ORGANID} 
+        AND 
+        	MEMBERID = #{MEMBERID}
+        ]]>
+    </select>
+
+    <select id="selAllOrganMemberCnt" resultType="java.lang.Integer">
+        <![CDATA[
+        SELECT 
+        	COUNT(*) AS "CNT"
+        FROM 
+        	T_UMS_ORGANMEMBER, 
+        	T_UMS_MEMBER
+        WHERE 
+        	T_UMS_ORGANMEMBER.MEMBERID = T_UMS_MEMBER.MEMBERID
+        ]]>
+    </select>
+
+    <insert id="inOrganMember" parameterType="hashMap">
+        <![CDATA[
+        INSERT INTO T_UMS_ORGANMEMBER(
+        	ORGAN_MEM_ID, 	ORGANID, 
+        	MEMBERID, 		REGDATE
+        ) VALUES(
+        	NEXTVAL('SEQ_UMS_ORGANMEMBER'),	#{ORGANID},
+        	#{MEMBERID},						NOW()
+        )
+        ]]>
+    </insert>
+
+    <delete id="delOrganMembers" parameterType="hashMap">
+        <![CDATA[
+        DELETE FROM 
+        	T_UMS_ORGANMEMBER 
+        WHERE 
+        	ORGANID=#{ORGANID}
+        ]]>
+    </delete>
+
+    <delete id="allDelMember" >
+        <![CDATA[
+        DELETE FROM T_UMS_ORGANMEMBER
+        ]]>
+    </delete>
+
+    <delete id="delOrganMembersFromMemID" parameterType="hashMap">
+        <![CDATA[
+        DELETE FROM 
+        	T_UMS_ORGANMEMBER
+        WHERE 
+        	ORGANID=#{ORGANID} 
+        AND 
+        	MEMBERID=#{MEMBERID}
+        ]]>
+    </delete>
+
+    <delete id="delOrganMembersOnlyMemID" parameterType="hashMap">
+        <![CDATA[
+        DELETE FROM 
+        	T_UMS_ORGANMEMBER
+        WHERE 
+        	MEMBERID=#{MEMBERID}
+        ]]>
+    </delete>
+
+    <delete id="delAllOrgan" parameterType="hashMap">
+        <![CDATA[
+        DELETE FROM T_UMS_ORGANIZATION
+        ]]>
+    </delete>
+
+    <delete id="delOrganOne" parameterType="hashMap">
+        <![CDATA[
+        DELETE FROM 
+        	T_UMS_ORGANIZATION 
+        WHERE 
+        	ORGANID = #{ORGANID}
+        ]]>
+    </delete>
+
+    <select id="selMaxOrganId" parameterType="hashMap" resultType="kr.uracle.ums.core.vo.setting.OrganizationVo">
+        <![CDATA[
+		SELECT 
+			ORGANID AS "ORGANID",		ORGANNAME AS "ORGANNAME",	P_ORGANID AS "P_ORGANID",
+			DEPTH AS "DEPTH",		SORTNO AS "SORTNO",		USE_YN AS "USE_YN",
+			REGDATE AS "REGDATE"
+		FROM 
+			T_UMS_ORGANIZATION
+		ORDER BY ORGANID DESC LIMIT 1
+        ]]>
+    </select>
+
+    <select id="selOrganInfoOne" parameterType="hashMap" resultType="kr.uracle.ums.core.vo.setting.OrganizationVo">
+        <![CDATA[
+        SELECT 
+			ORGANID AS "ORGANID",		ORGANNAME AS "ORGANNAME",	P_ORGANID AS "P_ORGANID",
+			DEPTH AS "DEPTH",		SORTNO AS "SORTNO",		USE_YN AS "USE_YN",
+			REGDATE AS "REGDATE"
+        FROM 
+        	T_UMS_ORGANIZATION
+        WHERE 
+        	ORGANID=#{ORGANID}
+        ]]>
+    </select>
+
+    <select id="selOranSendMember" parameterType="hashMap" resultType="hashMap">
+        <if test="pageNum != null"><include refid="head"/></if>
+        <![CDATA[
+        SELECT 
+        	A.ORGAN_MEM_ID AS "ORGAN_MEM_ID", 	A.ORGANID AS "ORGANID", 	A.MEMBERID AS "MEMBERID",
+        	B.MOBILE AS "MOBILE", 		B.MEMBERNAME AS "MEMBERNAME"
+        FROM 
+        	T_UMS_ORGANMEMBER A, 
+        	T_UMS_MEMBER B
+        WHERE 
+        	A.MEMBERID = B.MEMBERID
+        ORDER BY A.ORGAN_MEM_ID ASC
+        ]]>
+        <if test="pageNum != null"><include refid="bottom"/></if>
+    </select>
+</mapper>

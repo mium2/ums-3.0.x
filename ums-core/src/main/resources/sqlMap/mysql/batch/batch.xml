@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.batch">
+	<insert id="insProcessorInfo" parameterType="hashmap">
+		INSERT INTO T_UMS_PROCESSORINFO (
+										 PROCESSORID
+										,STATUS
+										,STARTTIME
+										,WORKTRACE
+		) VALUES (
+					 #{PROCESSORID}
+				 ,'R'
+				 ,now()
+				 ,#{WORKTRACE}
+				 )
+	</insert>
+	<update id="uptProcessorInfo" parameterType="hashmap">
+		UPDATE T_UMS_PROCESSORINFO
+		SET  COMPLETEDTIME = now()
+		  ,STATUS = 'C'
+		  ,RESULTCODE = #{RESULTCODE}
+		  ,RESULTMSG = #{RESULTMSG}
+		WHERE PROCESSORID = #{PROCESSORID}
+	</update>
+
+	<select id="selMasterCheck" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		PROCESSEOR_KEY
+		,HEALTH_CHECK
+		,MASTER_YN
+		,REGDTM
+		,now() AS NOW
+		FROM T_UMS_MASTER_CHECK
+		WHERE USE_SYSTEM = 'UMSAPI'
+		<if test="PROCESSEOR_KEY == null">
+			AND MASTER_YN = 'Y'
+		</if>
+		<if test="PROCESSEOR_KEY != null">
+			AND PROCESSEOR_KEY = #{PROCESSEOR_KEY}
+		</if>
+	</select>
+	<insert id="insMasterCheck" parameterType="hashmap">
+		INSERT INTO T_UMS_MASTER_CHECK (
+										PROCESSEOR_KEY
+									   ,USE_SYSTEM
+									   ,MASTER_YN
+									   ,REGDTM
+		) VALUES (
+					 #{PROCESSEOR_KEY}
+				 ,'UMSAPI'
+				 ,'N'
+				 ,now()
+				 )
+	</insert>
+	<update id="uptMasterHealthCheck" parameterType="hashmap">
+		UPDATE T_UMS_MASTER_CHECK
+		SET  HEALTH_CHECK = now()
+		WHERE MASTER_YN = 'Y'
+		  AND USE_SYSTEM = 'UMSAPI'
+		  AND PROCESSEOR_KEY = #{PROCESSEOR_KEY}
+	</update>
+	<update id="uptMasterChange" parameterType="hashmap">
+		UPDATE T_UMS_MASTER_CHECK AS T1,
+		(SELECT COUNT(*) as CNT FROM T_UMS_MASTER_CHECK WHERE MASTER_YN = 'Y' AND USE_SYSTEM = 'UMSAPI') AS T2
+		SET  HEALTH_CHECK = now()
+		<if test="MASTER_YN != null">
+			,MASTER_YN = 'N'
+		</if>
+		<if test="MASTER_YN == null">
+			,MASTER_YN = 'Y'
+		</if>
+		WHERE USE_SYSTEM = 'UMSAPI'
+		AND PROCESSEOR_KEY = #{PROCESSEOR_KEY}
+		<if test="MASTER_YN == null">
+			AND 0 = T2.CNT
+		</if>
+	</update>
+
+
+	<select id="selUmsSendDetailMaxDelSeqno" parameterType="hashmap" resultType="hashmap">
+		SELECT MAX(DETAIL_SEQNO) AS DETAIL_SEQNO
+		<if test="TABLE_NAME=='T_UMS_SEND_BATCH'">
+			FROM T_UMS_SEND_DETAIL_BATCH
+		</if>
+		<if test="TABLE_NAME=='T_UMS_SEND_REAL'">
+			FROM T_UMS_SEND_DETAIL_REAL
+		</if>
+		<![CDATA[
+		WHERE REGDATE < STR_TO_DATE(#{DEL_DATE} , '%Y%m%d')
+		]]>
+	</select>
+
+	<select id="selUmsSendMaxDelSeqno" parameterType="hashmap" resultType="hashmap">
+
+		SELECT UMS_SEQNO
+		<if test="TABLE_NAME=='T_UMS_SEND_BATCH'">
+			FROM T_UMS_SEND_DETAIL_BATCH
+		</if>
+		<if test="TABLE_NAME=='T_UMS_SEND_REAL'">
+			FROM T_UMS_SEND_DETAIL_REAL
+		</if>
+		WHERE DETAIL_SEQNO = #{DETAIL_SEQNO}
+	</select>
+
+	<delete id="delUmsDetail" parameterType="hashmap">
+		DELETE
+		<if test="TABLE_NAME=='T_UMS_SEND_BATCH'">
+			FROM T_UMS_SEND_DETAIL_BATCH
+		</if>
+		<if test="TABLE_NAME=='T_UMS_SEND_REAL'">
+			FROM T_UMS_SEND_DETAIL_REAL
+		</if>
+		<![CDATA[
+		WHERE DETAIL_SEQNO<=#{DETAIL_SEQNO}
+		]]>
+	</delete>
+
+	<delete id="delUmsSend" parameterType="hashmap">
+		DELETE
+		<if test="TABLE_NAME=='T_UMS_SEND_BATCH'">
+			FROM T_UMS_SEND_BATCH
+		</if>
+		<if test="TABLE_NAME=='T_UMS_SEND_REAL'">
+			FROM T_UMS_SEND_REAL
+		</if>
+		<![CDATA[
+		WHERE UMS_SEQNO<=#{UMS_SEQNO}
+		]]>
+	</delete>
+
+	<select id="selPushMaxDelSeqno" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT MAX(SEQNO) AS SEQNO
+		FROM T_PUSH_MSG_RECV_MASTER
+		WHERE REGDATE < STR_TO_DATE(#{DEL_DATE} , '%Y%m%d')
+		]]>
+	</select>
+
+	<delete id="delPushMsgRecvMaster" parameterType="hashmap">
+		<![CDATA[
+		DELETE FROM T_PUSH_MSG_RECV_MASTER
+		WHERE SEQNO<=#{SEQNO}
+		]]>
+	</delete>
+
+	<delete id="delPushSuccess" parameterType="hashmap">
+		<![CDATA[
+		DELETE FROM T_PUSH_SUCCESS
+		WHERE SEQNO<=#{SEQNO}
+		]]>
+	</delete>
+
+	<delete id="delPushFail" parameterType="hashmap">
+		<![CDATA[
+		DELETE FROM T_PUSH_FAIL
+		WHERE SEQNO<=#{SEQNO}
+		]]>
+	</delete>
+
+	<delete id="logTableClear" parameterType="hashmap">
+		DELETE FROM ${TABLE_NAME}
+		<if test="base_col != null and base_col != ''">
+			<if test="base_col_type == 'DATE'">
+				WHERE ${base_col} <![CDATA[<]]> STR_TO_DATE(#{base_value} , '%Y%m%d')
+			</if>
+			<if test="base_col_type == 'VARCHAR'">
+				WHERE ${base_col} <![CDATA[<]]> #{base_value}
+			</if>
+		</if>
+	</delete>
+</mapper>

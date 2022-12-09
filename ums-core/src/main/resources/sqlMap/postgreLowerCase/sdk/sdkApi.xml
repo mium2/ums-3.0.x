@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.sdk">
+    <!-- 페이징 처리 쿼리 부분 시작 -->
+    <sql id="head">
+		SELECT viewC.*
+		FROM (
+		SELECT
+		(ROW_NUMBER() OVER()) AS "RNUM"
+		,COUNT(*) OVER() AS "TOT_CNT"
+		,viewB.*
+		FROM (SELECT viewA.* FROM (
+	</sql>
+
+    <sql id="bottom">
+		) AS viewA
+		) AS viewB
+		) AS viewC
+		WHERE "RNUM" BETWEEN (CAST(#{pageNum} AS INTEGER) -1) * CAST(#{pageSize} AS INTEGER) + 1 AND CAST(#{pageNum} AS INTEGER) * CAST(#{pageSize} AS INTEGER)
+	</sql>
+
+    <select id="selSendResultList" parameterType="hashmap" resultType="kr.uracle.ums.core.controller.sdk.SendResultVo">
+        SELECT
+        T1.DETAIL_SEQNO AS "DETAIL_SEQNO"
+        ,T1.UMS_SEQNO AS "UMS_SEQNO"
+        ,T1.CUID AS "CUID"
+        ,T1.CNAME AS "CNAME"
+        ,T1.MOBILE_NUM AS "MOBILE_NUM"
+        ,T1.SEND_TYPE AS "SEND_KIND"
+        ,T1.SEND_MSG AS "SEND_TYPE"
+        ,T1.MSG_VARS AS "MSG_VARS"
+        ,T1.SEND_RESULT AS "SEND_RESULT"
+        ,T1.SUCC_STATUS AS "STATUS"
+        ,T1.ERRCODE AS "ERRCODE"
+        ,T1.RESULTMSG AS "RESULTMSG"
+        ,TO_CHAR(T1.REGDATE,'YYYY-MM-DD HH24:MI') AS "REGDATE"
+        ,TO_CHAR(T1.MODDATE,'YYYY-MM-DD HH24:MI') AS "MODDATE"
+        ,T2.CUST_TRANSGROUPKEY AS "CUST_TRANSGROUPKEY"
+        ,T2.CUST_TRANSKEY AS "CUST_TRANSKEY"
+        ,T2.VAR1 AS "VAR1"
+        ,T2.VAR2 AS "VAR2"
+        ,T2.VAR3 AS "VAR3"
+        ,T2.VAR4 AS "VAR4"
+        ,T2.VAR5 AS "VAR5"
+        ,T2.VAR6 AS "VAR6"
+        ,T2.VAR7 AS "VAR7"
+        ,T2.VAR8 AS "VAR8"
+        ,T2.VAR9 AS "VAR9"
+        <choose>
+            <when test="tranType=='BATCH'">
+                FROM T_UMS_SEND_DETAIL_BATCH AS T1, T_UMS_SEND_BATCH AS T2
+            </when>
+            <otherwise>
+                FROM T_UMS_SEND_DETAIL_REAL AS T1, T_UMS_SEND_REAL AS T2
+            </otherwise>
+        </choose>
+        WHERE T2.UMS_SEQNO=T1.UMS_SEQNO
+        AND T1.REGDATE BETWEEN TO_TIMESTAMP(#{startDt}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP(#{endDt}, 'YYYY-MM-DD HH24:MI:SS')
+        AND T2.UMS_SEQNO = #{processSeqno}
+    </select>
+
+
+    <select id="sendMsgInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT TITLE AS "TITLE", PUSH_MSG AS "PUSH_MSG", FRIENDTOLK_MSG AS "FRIENDTOLK_MSG", SMS_MSG AS "SMS_MSG"
+        , ALLIMTOLK_TEMPLCODE AS "ALLIMTOLK_TEMPLCODE", FRT_TEMPL_ID AS "FRT_TEMPL_ID", SMS_TEMPL_ID AS "SMS_TEMPL_ID", SMS_TITLE AS "SMS_TITLE"
+        <if test="MASTER_TABLE == 'BATCH'">
+            FROM T_UMS_SEND_BATCH
+        </if>
+        <if test="MASTER_TABLE == 'REAL'">
+            FROM T_UMS_SEND_REAL
+        </if>
+        WHERE UMS_SEQNO=CAST(#{UMS_SEQNO} AS BIGINT)
+    </select>
+
+</mapper>

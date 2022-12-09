@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+       <bean id="myRedis" class= "java.util.HashSet">
+              <constructor-arg>
+                     <list>
+                            <value>${redis.master.hostName}:${redis.master.port}</value> <!-- 첫번째 Redis는 master Redis를 등록한다 -->
+                     </list>
+              </constructor-arg>
+       </bean>
+
+       <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+       <bean id="genericJackson2JsonRedisSerializer" class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+
+       <bean id="clusterNodes" class="java.util.ArrayList">
+              <constructor-arg>
+                     <list>
+                            <value>${redis.master.hostName}:${redis.master.port}</value>
+                     </list>
+              </constructor-arg>
+       </bean>
+
+       <bean id="clusterConfiguration" class="org.springframework.data.redis.connection.RedisClusterConfiguration">
+              <constructor-arg name="clusterNodes" ref="clusterNodes"/>
+       </bean>
+
+       <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+              <property name="maxTotal" value="100"/>
+              <property name="maxWaitMillis" value="10000"/>
+              <property name="maxIdle" value="100"/>
+              <property name="minIdle" value="0"/>
+              <!--       <property name="testOnBorrow" value="false" />-->
+              <!--       <property name="testOnReturn" value="true" />-->
+              <!--<property name="testWhileIdle" value="true" />-->
+              <!--       <property name="numTestsPerEvictionRun" value="10" />-->
+              <!--       <property name="timeBetweenEvictionRunsMillis" value="60000"/>-->
+       </bean>
+
+       <bean id="masterJedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+              <constructor-arg name="clusterConfig" ref="clusterConfiguration"/>
+              <constructor-arg name="poolConfig" ref="jedisPoolConfig"/>
+              <!--<property name="password" value=""/>-->
+       </bean>
+
+       <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+              <property name="connectionFactory" ref="masterJedisConnFactory" />
+              <property name="keySerializer" ref="stringRedisSerializer"/>
+              <property name="valueSerializer" ref="stringRedisSerializer"/>
+              <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+              <property name="hashValueSerializer" ref="stringRedisSerializer"/>
+              <property name="stringSerializer" ref="stringRedisSerializer"/>
+       </bean>
+
+       <bean id="redisTemplate_vo" class="org.springframework.data.redis.core.RedisTemplate">
+              <property name="connectionFactory" ref="masterJedisConnFactory" />
+              <property name="enableTransactionSupport" value="false"/>
+              <property name="exposeConnection" value="false"/>
+              <property name="keySerializer" ref="stringRedisSerializer"/>
+              <property name="valueSerializer" ref="genericJackson2JsonRedisSerializer"/>
+              <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+              <property name="hashValueSerializer" ref="stringRedisSerializer"/>
+              <property name="stringSerializer" ref="stringRedisSerializer"/>
+       </bean>
+</beans>

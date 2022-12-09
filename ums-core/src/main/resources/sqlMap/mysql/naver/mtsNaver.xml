@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.naver.mts">
+    <select id="selTemplate" parameterType="hashmap" resultType="kr.uracle.ums.core.vo.template.NaverTemplateVo">
+        <![CDATA[
+        SELECT
+			TMPL_CD, 	TMPL_ID, 		MSG,
+			BUTTONS, 	PARTNERKEY, 	NAVER_PROFILE,
+			IMGHASH, 	CATEGORYCODE, 	TEMPL_STATUS
+        FROM 
+			T_UMS_NAVER_TEMPL
+        WHERE 
+			TMPL_CD = #{TMPL_CD}
+        ]]>
+    </select>
+
+    <insert id="inNaverSendMsg" parameterType="kr.uracle.ums.codec.redis.vo.naver.MtsNaverProcessBean">
+        <![CDATA[
+            INSERT INTO MTS_NAVER_MSG (
+	            TRAN_REFKEY,	        	TRAN_SENDER_KEY,
+	            TRAN_TMPL_CD,	            TRAN_BUTTON,	        TRAN_PHONE,
+	            TRAN_MSG,	            	TRAN_TMPL_PARAMS,	    TRAN_DATE,
+	            TRAN_TYPE,	            	TRAN_STATUS,	        TRAN_CALLBACK,
+	            TRAN_SUBJECT,	            TRAN_REPLACE_MSG,		TRAN_REPLACE_TYPE,
+                TRAN_IMGHASH,               TRAN_USER_NAME,			TRAN_ETC4
+            ) VALUES (
+				#{TRAN_REFKEY},	    		#{SERVICE_ID},
+	            #{TRAN_TMPL_CD},	        #{TRAN_BUTTON},	   	 	#{MOBILE_NUM},
+	            #{MSG_BODY},	            '',	            		NOW(),
+	            #{TRAN_TYPE},	            #{TRAN_STATUS},	    	#{CALLBACK_NUM},
+	            #{TITLE},	        		#{MSG_BODY},			#{TRAN_REPLACE_TYPE},
+                #{TRAN_IMGHASH},            #{TRAN_USER_NAME},		#{TRANSACTION_KEY}
+            )
+        ]]>
+    </insert>
+
+	<insert id="inNaverSendMsgDynamic" parameterType="kr.uracle.ums.codec.redis.vo.naver.MtsNaverProcessBean">
+		<![CDATA[
+            INSERT INTO ${TABLE_NAME} (
+	            TRAN_REFKEY,	        	TRAN_SENDER_KEY,
+	            TRAN_TMPL_CD,	            TRAN_BUTTON,	        TRAN_PHONE,
+	            TRAN_MSG,	            	TRAN_TMPL_PARAMS,	    TRAN_DATE,
+	            TRAN_TYPE,	            	TRAN_STATUS,	        TRAN_CALLBACK,
+	            TRAN_SUBJECT,	            TRAN_REPLACE_MSG,		TRAN_REPLACE_TYPE,
+				TRAN_IMGHASH,               TRAN_USER_NAME,			TRAN_ETC4
+            ) VALUES (
+				#{TRAN_REFKEY},	    		#{SERVICE_ID},
+	            #{TRAN_TMPL_CD},	        #{TRAN_BUTTON},	   	 	#{MOBILE_NUM},
+	            #{MSG_BODY},	            '',	            		NOW(),
+	            #{TRAN_TYPE},	            #{TRAN_STATUS},	    	#{CALLBACK_NUM},
+	            #{TITLE},	        		#{MSG_BODY},			#{TRAN_REPLACE_TYPE},
+				#{TRAN_IMGHASH},            #{TRAN_USER_NAME},		#{TRANSACTION_KEY}
+            )
+        ]]>
+	</insert>
+
+    <update id="upTempletInfo" parameterType="hashmap">
+        UPDATE 
+			T_UMS_NAVER_TEMPL
+        SET 
+			TMPL_ID 			= #{TMPL_ID},
+			MSG 				= #{MSG},
+			PARTNERKEY 			= #{PARTNERKEY},
+			NAVER_PROFILE 		= #{NAVER_PROFILE},
+			CATEGORYCODE 		= #{CATEGORYCODE},
+			BUTTONS 			= #{BUTTONS},
+			IMGHASH 			= #{IMGHASH},
+			TEMPL_STATUS 		= #{TEMPL_STATUS},
+			TEMPL_SEND_STATUS	= #{TEMPL_SEND_STATUS},
+			UPDATE_DATE 			= STR_TO_DATE(#{UPDATE_DATE}, '%Y-%m-%d %H:%i:%s'),
+			UPDATE_ID			= 'SYNCBATCH'
+        WHERE 
+			TMPL_CD = #{TMPL_CD}
+    </update>
+
+    <insert id="inTempletInfo" parameterType="hashmap">
+        INSERT INTO T_UMS_NAVER_TEMPL(
+			TMPL_CD, 				TMPL_ID, 			MSG,
+			PARTNERKEY,			NAVER_PROFILE,	CATEGORYCODE,
+			BUTTONS,				IMGHASH,			TEMPL_STATUS,
+			TEMPL_SEND_STATUS,	REG_DATE,			REG_ID,
+			UPDATE_ID
+		)
+        VALUES(
+			#{TMPL_CD},				#{TMPL_ID},			#{MSG},
+			#{PARTNERKEY},			#{NAVER_PROFILE},	#{CATEGORYCODE},
+			#{BUTTONS},				#{IMGHASH},			#{TEMPL_STATUS},
+			#{TEMPL_SEND_STATUS},	NOW(),				'SYNCBATCH',
+			'SYNCBATCH'
+		)
+    </insert>
+</mapper>

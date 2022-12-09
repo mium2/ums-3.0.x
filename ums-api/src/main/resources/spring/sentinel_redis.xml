@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+   <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+    <bean id="genericJackson2JsonRedisSerializer" class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+   <!-- ###### REDIS가 2대이상 sentinel을 이용한 master 세팅시 설정 ######-->
+   <bean id="myMaster" class= "org.springframework.data.redis.connection.RedisNode"
+         c:host="${redis.master.hostName}"
+         c:port="${redis.master.port}"
+         p:name="mymaster"/>
+
+   <bean id="mySent1" class= "org.springframework.data.redis.connection.RedisNode" c:host="${sentinel.ip1}" c:port="${sentinel.port1}"/>
+    <!--<bean id="mySent2" class= "org.springframework.data.redis.connection.RedisNode" c:host="${sentinel.ip2}" c:port="${sentinel.port2}"/>-->
+    <!--<bean id="mySent3" class= "org.springframework.data.redis.connection.RedisNode" c:host="${sentinel.ip3}" c:port="${sentinel.port3}"/>-->
+    <bean id="mySents" class= "java.util.HashSet">
+        <constructor-arg>
+            <list>
+                <ref bean="mySent1"/>
+                <!--<ref bean="mySent2"/>-->
+                <!--<ref bean="mySent3"/>-->
+            </list>
+        </constructor-arg>
+    </bean>
+    <!-- 사용가능한 Sentinel를 모두 등록한다. -->
+    <bean id="mySentinels" class= "java.util.HashSet">
+        <constructor-arg>
+            <list>
+                <value>${sentinel.ip1}:${sentinel.port1}</value>
+                <!--<value>${sentinel.ip2}:${sentinel.port2}</value>-->
+                <!--<value>${sentinel.ip3}:${sentinel.port3}</value>-->
+            </list>
+        </constructor-arg>
+    </bean>
+    <!-- REDIS를 모두 등록한다. -->
+    <bean id="myRedis" class= "java.util.HashSet">
+        <constructor-arg>
+            <list>
+                <value>${redis.master.hostName}:${redis.master.port}</value> <!-- 첫번째 Redis는 master Redis를 등록한다 -->
+                <value>211.241.199.217:6379</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="redisSentinelConf" class="kr.uracle.ums.core.util.redis.MySentinelConfiguration"
+          p:master-ref="myMaster"
+          p:mySentinels-ref="mySents"/>
+
+   <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+       <property name="maxTotal" value="100"/>
+       <property name="maxWaitMillis" value="10000"/>
+       <property name="maxIdle" value="100"/>
+       <property name="minIdle" value="0"/>
+<!--       <property name="testOnBorrow" value="false" />-->
+<!--       <property name="testOnReturn" value="true" />-->
+       <!--<property name="testWhileIdle" value="true" />-->
+<!--       <property name="numTestsPerEvictionRun" value="10" />-->
+<!--       <property name="timeBetweenEvictionRunsMillis" value="60000"/>-->
+   </bean>
+
+    <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.master.hostName}"
+          p:port="${redis.master.port}"
+          p:password=""
+          p:usePool="true"
+          p:timeout="5000"
+          p:poolConfig-ref="jedisPoolConfig"
+          p:database="${redis.master.database}"
+          c:sentinelConfig-ref="redisSentinelConf"
+    />
+
+    <bean id="redisTemplate"
+          class="org.springframework.data.redis.core.RedisTemplate"
+          p:connectionFactory-ref="jedisConnFactory"
+          p:enableTransactionSupport="false"
+          p:exposeConnection="false"
+          p:keySerializer-ref="stringRedisSerializer"
+          p:valueSerializer-ref="stringRedisSerializer"
+          p:hashKeySerializer-ref="stringRedisSerializer"
+          p:hashValueSerializer-ref="stringRedisSerializer"
+    />
+
+    <bean id="redisTemplate_vo" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnFactory" />
+        <property name="enableTransactionSupport" value="false"/>
+        <property name="exposeConnection" value="false"/>
+        <property name="keySerializer" ref="stringRedisSerializer"/>
+        <property name="valueSerializer" ref="genericJackson2JsonRedisSerializer"/>
+        <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+        <property name="hashValueSerializer" ref="stringRedisSerializer"/>
+        <property name="stringSerializer" ref="stringRedisSerializer"/>
+    </bean>
+</beans>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false">
+	<diskStore path="user.dir/cache" />	
+	<!--
+		ehcache 설정값
+		maxEntriesLocalHeap=cache에 저장 할  최대 Element 갯수 (만일 100으로 세팅되어 있다면 최대 100 session의  publish msg 저장가능)
+    	eternal: 이 값이 true이면 timeout 관련 설정(timeToIdleSeconds, timeToLiveSeconds)은 무시되고, Element가 캐시에서 삭제되지 않는다.
+		overflowToDisk: cache 에 저장되는 Element를 disk에 저장할지 여부.
+		diskPersistent: disk에 저장된 Element를 데몬 종료에도 지속할지여부. false일경우 daemon shutdown시  disk에 저장한 파일 삭제
+		timeToIdleSeconds: Element가 지정한 시간 동안 사용(조회)되지 않으면 캐시에서 제거된다. 이 값이 0인 경우 조회 관련 만료 시간을 지정하지 않는다. 기본값은 0이다.
+		timeToLiveSeconds: Element가 존재하는 시간. 이 시간이 지나면 캐시에서 제거된다. 이 시간이 0이면 만료 시간을 지정하지 않는다. 기본값은 0이다.
+		memoryStoreEvictionPolicy: 객체의 개수가 maxEntriesLocalHeap에 도달했을 때,모메리에서 객체를 어떻게 제거할 지에 대한 정책을 지정한다. 기본값은 LRU이다. FIFO와 LFU도 지정할 수 있다.
+		diskSpoolBufferSizeMB: disk 에 write 버퍼 사이즈 
+	 -->
+
+	<!--알림톡 템플릿 캐시-->
+	<cache name="ALT_TEMPLATE_CACHE"
+		   maxEntriesLocalHeap="10000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="100"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="3600"
+		   memoryStoreEvictionPolicy="LRU"/>
+		   
+	<!--RCS 템플릿 캐시-->
+	<cache name="RCS_TEMPLATE_CACHE"
+		   maxEntriesLocalHeap="10000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="100"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="3600"
+		   memoryStoreEvictionPolicy="LRU"/>
+
+	<!--네이버톡 템플릿 캐시-->
+	<cache name="NAVER_TEMPLATE_CACHE"
+		   maxEntriesLocalHeap="10000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="100"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="3600"
+		   memoryStoreEvictionPolicy="LRU"/>
+
+	<!--공통템플릿(푸시/친구톡/SMS) 캐시-->
+	<cache name="COMMON_TEMPLATE_CACHE"
+		   maxEntriesLocalHeap="10000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="100"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="3600"
+		   memoryStoreEvictionPolicy="LRU"/>
+
+	<!--UMS 메모리로만 저장. 리부트시 오프메세지 사라짐-->
+	<cache name="MEMBER_CACHE"
+		   maxEntriesLocalHeap="100000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="300"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="0"
+		   memoryStoreEvictionPolicy="LRU"/>
+
+	<!--UMS 메모리로만 저장. 수신거부 유저아이디. 푸시발송 제한시 사용-->
+	<cache name="PREVENT_ID_CACHE"
+		   maxEntriesLocalHeap="10000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="100"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="0"
+		   memoryStoreEvictionPolicy="LRU"/>
+
+	<!--UMS 메모리로만 저장. 수신거부 핸드폰번호. 카카오, SMS 제한시 사용-->
+	<cache name="PREVENT_MOBILE_CACHE"
+		   maxEntriesLocalHeap="10000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="100"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="0"
+		   memoryStoreEvictionPolicy="LRU"/>
+		   
+	<!--UMS 메모리로만 저장. 채널별 연동사 분배 비율-->
+	<cache name="CHANNEL_ALLOT_RATE"
+		   maxEntriesLocalHeap="10000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="100"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="300"
+		   memoryStoreEvictionPolicy="LRU"/>
+
+	<!--UMS 메모리로만 저장. 피로도 제한시 사용-->
+	<cache name="FATIGUE_CACHE"
+		   maxEntriesLocalHeap="10"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="1"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="3600"
+		   memoryStoreEvictionPolicy="LRU"/>
+
+	<!--UMS 메모리로만 저장. 피로도 제한시 사용-->
+	<cache name="VALIDITY_CACHE"
+		   maxEntriesLocalHeap="10"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskSpoolBufferSizeMB="1"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="60"
+		   memoryStoreEvictionPolicy="LRU"/>
+
+	<cache name="AM_SEND_CACHE"
+		   maxEntriesLocalHeap="50000"
+		   eternal="false"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="30"
+		   memoryStoreEvictionPolicy="FIFO"/>
+</ehcache>

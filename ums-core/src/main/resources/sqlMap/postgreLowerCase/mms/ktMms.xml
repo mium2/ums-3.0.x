@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mms.kt">
+    <insert id="inMmsSend" parameterType="kr.uracle.ums.codec.redis.vo.mms.KtMmsProcessBean">
+        <![CDATA[
+        INSERT INTO SDK_MMS_SEND(
+            MSG_ID,            	USER_ID,			SCHEDULE_TYPE,
+            SUBJECT,           	NOW_DATE,			SEND_DATE,
+            CALLBACK,          	DEST_COUNT,		    DEST_INFO,
+            MMS_MSG,           	CONTENT_COUNT,	    CONTENT_DATA,
+            KT_OFFICE_CODE,    	CDR_ID,	            RESERVED9,
+		    SEND_STATUS,        SEND_COUNT,			SEND_RESULT,
+            MSG_TYPE,           STD_ID
+		)
+        VALUES(
+            NEXTVAL('SDK_MMS_SEQ'), #{USER_ID},				#{SCHEDULE_TYPE},
+            #{TITLE},				#{NOW_DATE},			#{SEND_DATE},
+            #{CALLBACK_NUM},		#{DEST_COUNT},			#{DEST_INFO},
+            #{MSG_BODY},			#{CONTENT_COUNT},		#{CONTENT_DATA},
+            #{KT_OFFICE_CODE},		#{CDR_ID},				#{TRANSACTION_KEY},
+            #{SEND_STATUS},         #{SEND_COUNT},			#{SEND_RESULT},
+            #{MSG_TYPE},            #{MASTERTABLE_SEQNO}
+		)
+        ]]>
+    </insert>
+
+    <insert id="inMmsSendDynamic" parameterType="kr.uracle.ums.codec.redis.vo.mms.KtMmsProcessBean">
+        <![CDATA[
+        INSERT INTO ${TABLE_NAME}(
+            MSG_ID,            	USER_ID,			SCHEDULE_TYPE,
+            SUBJECT,           	NOW_DATE,			SEND_DATE,
+            CALLBACK,          	DEST_COUNT,		    DEST_INFO,
+            MMS_MSG,           	CONTENT_COUNT,	    CONTENT_DATA,
+            KT_OFFICE_CODE,    	CDR_ID,	            RESERVED9,
+		    SEND_STATUS,        SEND_COUNT,			SEND_RESULT,
+            MSG_TYPE,           STD_ID
+		)
+        VALUES(
+            NEXTVAL('SDK_MMS_SEQ'), #{USER_ID},				#{SCHEDULE_TYPE},
+            #{TITLE},				#{NOW_DATE},			#{SEND_DATE},
+            #{CALLBACK_NUM},		#{DEST_COUNT},			#{DEST_INFO},
+            #{MSG_BODY},			#{CONTENT_COUNT},		#{CONTENT_DATA},
+            #{KT_OFFICE_CODE},		#{CDR_ID},				#{TRANSACTION_KEY},
+            #{SEND_STATUS},         #{SEND_COUNT},			#{SEND_RESULT},
+            #{MSG_TYPE},            #{MASTERTABLE_SEQNO}
+		)
+        ]]>
+    </insert>
+</mapper>

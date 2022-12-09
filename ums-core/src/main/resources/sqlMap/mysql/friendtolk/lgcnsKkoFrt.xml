@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.friendtolk.lgcns">
+    <insert id="inFrtSendMsg" parameterType="kr.uracle.ums.codec.redis.vo.kko.LgcnsKkoFrtProcessBean">
+        <![CDATA[
+        INSERT INTO TSMS_AGENTFT_MESSAGE(
+	        SERVICE_SEQNO,	        SEND_MESSAGE,
+	        SUBJECT,		        BACKUP_PROCESS_CODE,
+	        MESSAGE_TYPE,	        CONTENTS_TYPE,	        RECEIVE_MOBILE_NO,
+	        CALLBACK_NO,	        JOB_TYPE,		        SEND_RESERVE_DATE,
+	        TEMPLATE_CODE,	        IMG_ATTACH_FLAG,	    KKO_BTN_NAME,
+	        KKO_BTN_URL,	        KKO_BTN_LINK1,	        KKO_BTN_LINK2,
+	        KKO_BTN_LINK3,	        KKO_BTN_LINK4,	        KKO_BTN_LINK5,
+	        KKO_IMG_PATH,	        KKO_IMG_LINK_URL,       REGISTER_BY,
+            CUID
+        ) VALUES(
+	        #{SERVICE_ID},          #{MSG_BODY},
+	        #{TITLE},		        #{BACKUP_PROCESS_CODE},
+	        #{MESSAGE_TYPE},        #{CONTENTS_TYPE},      #{MOBILE_NUM},
+	        #{CALLBACK_NUM},        #{JOB_TYPE},	       NOW(),
+	        'FREE',			        #{IMG_ATTACH_FLAG},    #{KKO_BTN_NAME},
+	        #{KKO_BTN_URL},	        #{KKO_BTN_LINK1},      #{KKO_BTN_LINK2},
+	        #{KKO_BTN_LINK3},       #{KKO_BTN_LINK4},      #{KKO_BTN_LINK5},
+	        #{KKO_IMG_PATH},	    #{KKO_IMG_LINK_URL},   #{REGISTER_BY},
+            #{TRANSACTION_KEY}
+		)
+        ]]>
+    </insert>
+    <insert id="inFrtSendMsgDynamic" parameterType="kr.uracle.ums.codec.redis.vo.kko.LgcnsKkoFrtProcessBean">
+        <![CDATA[
+        INSERT INTO ${TABLE_NAME}(
+            SERVICE_SEQNO,	        SEND_MESSAGE,
+            SUBJECT,		        BACKUP_PROCESS_CODE,
+            MESSAGE_TYPE,	        CONTENTS_TYPE,	        RECEIVE_MOBILE_NO,
+            CALLBACK_NO,	        JOB_TYPE,		        SEND_RESERVE_DATE,
+            TEMPLATE_CODE,	        IMG_ATTACH_FLAG,	    KKO_BTN_NAME,
+            KKO_BTN_URL,	        KKO_BTN_LINK1,	        KKO_BTN_LINK2,
+            KKO_BTN_LINK3,	        KKO_BTN_LINK4,	        KKO_BTN_LINK5,
+            KKO_IMG_PATH,	        KKO_IMG_LINK_URL,       REGISTER_BY,
+            CUID
+        ) VALUES(
+            #{SERVICE_ID},          #{MSG_BODY},
+            #{TITLE},		        #{BACKUP_PROCESS_CODE},
+            #{MESSAGE_TYPE},        #{CONTENTS_TYPE},      #{MOBILE_NUM},
+            #{CALLBACK_NUM},        #{JOB_TYPE},	       NOW(),
+            'FREE',			        #{IMG_ATTACH_FLAG},    #{KKO_BTN_NAME},
+            #{KKO_BTN_URL},	        #{KKO_BTN_LINK1},      #{KKO_BTN_LINK2},
+            #{KKO_BTN_LINK3},       #{KKO_BTN_LINK4},      #{KKO_BTN_LINK5},
+            #{KKO_IMG_PATH},	    #{KKO_IMG_LINK_URL},   #{REGISTER_BY},
+            #{TRANSACTION_KEY}
+		)
+        ]]>
+    </insert>
+</mapper>

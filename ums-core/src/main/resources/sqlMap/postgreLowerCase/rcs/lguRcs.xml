@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.rcs.lgu">
+
+    <insert id="inRcsSend" parameterType="kr.uracle.ums.codec.redis.vo.rcs.LguRcsProcessBean">
+        <![CDATA[
+       		INSERT INTO RCS_MSG(
+                MSGKEY,			        STATUS, 		    SENDABLE, 		    REQDATE, 			PHONE,			    CALLBACK,
+                TYPE, 			        MSG_HEADER,	        MSG_TITLE, 		    MSG,				MSG_FOOTER,
+                MSG_COPYALLOWED,        FALLBACK_YN,	    IMG_GROUP_KEY,	    IMG_GROUP_CNT, 	    MSGBASE_ID,
+                BRAND_ID, 		        RCS_OBJECT, 	    BTN_OBJECT, 		BTN_CNT,			BTN_INSERT_TYPE,
+                WT_REG_USER_ID,	        WT_SEND_GRP,        ETC6
+            )
+            VALUES(
+                NEXTVAL('RCS_MSG_SEQ'), #{STATUS}, 	        #{SENDABLE}, 	    NOW(), 				#{MOBILE_NUM}, 		#{CALLBACK_NUM},
+                #{TYPE}, 				#{MSG_HEADER},	    #{TITLE}, 		    #{MSG_BODY},		#{MSG_FOOTER},
+                #{MSG_COPYALLOWED},	    #{FALLBACK_YN},	    #{IMG_GROUP_KEY},	#{IMG_GROUP_CNT}, 	#{MSGBASE_ID},
+                #{BRAND_ID},			#{RCS_OBJECT}, 	    #{BTN_OBJECT}, 		#{BTN_CNT},			#{BTN_INSERT_TYPE},
+                #{WT_REG_USER_ID},	    #{WT_SEND_GRP},     #{TRANSACTION_KEY}
+			)
+        ]]>
+    </insert>
+
+    <insert id="inRcsSendDynamic" parameterType="kr.uracle.ums.codec.redis.vo.rcs.LguRcsProcessBean">
+        <![CDATA[
+       		INSERT INTO ${TABLE_NAME}(
+                MSGKEY,			        STATUS, 		    SENDABLE, 		    REQDATE, 			PHONE,			    CALLBACK,
+                TYPE, 			        MSG_HEADER,	        MSG_TITLE, 		    MSG,				MSG_FOOTER,
+                MSG_COPYALLOWED,        FALLBACK_YN,	    IMG_GROUP_KEY,	    IMG_GROUP_CNT, 	    MSGBASE_ID,
+                BRAND_ID, 		        RCS_OBJECT, 	    BTN_OBJECT, 		BTN_CNT,			BTN_INSERT_TYPE,
+                WT_REG_USER_ID,	        WT_SEND_GRP,        ETC6
+            )
+            VALUES(
+                NEXTVAL('RCS_MSG_SEQ'), #{STATUS}, 	        #{SENDABLE}, 	    NOW(), 				#{MOBILE_NUM}, 		#{CALLBACK_NUM},
+                #{TYPE}, 				#{MSG_HEADER},	    #{TITLE}, 		    #{MSG_BODY},		#{MSG_FOOTER},
+                #{MSG_COPYALLOWED},	    #{FALLBACK_YN},	    #{IMG_GROUP_KEY},	#{IMG_GROUP_CNT}, 	#{MSGBASE_ID},
+                #{BRAND_ID},			#{RCS_OBJECT}, 	    #{BTN_OBJECT}, 		#{BTN_CNT},			#{BTN_INSERT_TYPE},
+                #{WT_REG_USER_ID},	    #{WT_SEND_GRP},     #{TRANSACTION_KEY}
+			)
+        ]]>
+    </insert>
+
+    <insert id="inRcsImg" parameterType="kr.uracle.ums.codec.redis.vo.rcs.LguRcsProcessBean">
+        <![CDATA[
+        INSERT INTO RCS_IMG(
+        	 IMGKEY,		GROUP_KEY,	GROUP_CNT,	STATUS,		SENDABLE,
+			 BRAND_ID,	IMG_PATH,		REQDATE,		TEMPLATE_YN
+        )
+        VALUES(
+        	 NEXTVAL('RCS_IMG_SEQ'),	#{IMG_GROUP_KEY}, 	#{IMG_GROUP_CNT}, 	#{STATUS}, 	#{SENDABLE},
+        	 #{BRAND_ID}, 	            #{IMG_PATH}, 		NOW(), 			    'N'
+        )
+        ]]>
+    </insert>
+</mapper>

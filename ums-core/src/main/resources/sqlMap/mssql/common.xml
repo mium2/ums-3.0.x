@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.common">
+
+	<select id="getAllPushService" parameterType="java.lang.String" resultType="hashmap">
+		<![CDATA[
+		select * from T_PUSH_SERVICE
+		]]>
+	</select>
+	
+	<select id="selMsgTypeList" parameterType="hashmap" resultType="hashmap">
+		SELECT '정보' text, 'I' val
+		UNION ALL
+		SELECT '광고' text, 'A' val
+	</select>
+
+	<select id="selPlusFriend" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			 PLUS_ID
+			,ALLIMTOLK_SVC_ID
+			,FRIENDTOLK_SVC_ID
+		FROM T_UMS_PLUS_ID
+		WHERE USE_YN='Y'
+		<if test="dashBoardType == 'Alim'">
+		  AND ALLIMTOLK_SVC_ID IS NOT NULL
+		</if>
+		<if test="dashBoardType == 'Friend'">
+		  AND FRIENDTOLK_SVC_ID IS NOT NULL
+		</if>
+	</select>
+
+	<select id="selCallBackNum" parameterType="hashmap" resultType="hashmap">
+		SELECT SENDER_NAME, SENDER_NUM FROM T_UMS_SMS_SENDER
+	</select>
+
+	<select id="selSearchAllMember" parameterType="hashMap" resultType="java.util.LinkedHashMap">
+		<![CDATA[
+		SELECT MEMBERID,MEMBERNAME,MOBILE
+		FROM T_UMS_MEMBER
+		]]>
+		<where>
+			<if test="SEARCHKEY1 !=null">
+				${SEARCHKEY1} LIKE '%'+#{SEARCHVAR1}+'%'
+			</if>
+			<if test="SEARCHKEY2 !=null">
+				AND ${SEARCHKEY2} LIKE '%'+#{SEARCHVAR2}+'%'
+			</if>
+		</where>
+	</select>
+
+	<select id="selMacroCode" parameterType="hashmap" resultType="hashmap">
+		SELECT MACROCODE, MACRO_ORDER FROM T_UMS_MACROCODE where USE_YN='Y'
+	</select>
+
+	<select id="selKkoInfo" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		PLUS_ID
+		,INFO
+		,USE_YN
+		,REG_ID
+		,ALLIMTOLK_SVC_ID
+		,FRIENDTOLK_SVC_ID
+		FROM T_UMS_PLUS_ID
+	</select>
+
+	<select id="selectAllPreventUsers" parameterType="hashmap" resultType="kr.uracle.ums.core.service.bean.PreventUserBean">
+        SELECT USERSEQNO,USERID,USERNAME,MOBILE,APPID,REJECTCHANNEL,REG_DT,MOD_DT,REG_ID
+        FROM T_UMS_REJECTUSER
+        ORDER BY USERSEQNO DESC
+    </select>
+</mapper>

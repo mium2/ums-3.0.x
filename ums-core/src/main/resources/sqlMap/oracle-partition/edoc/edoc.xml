@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.edoc">
+
+    <insert id="inEdocLog" parameterType="kr.uracle.ums.core.processor.edoc.EdocProcessBean">
+        <![CDATA[
+        INSERT INTO T_UMS_EDOC_LOG(
+            REQUEST_TRANID, DOCID, PROVIDER, CI, DOCHASH,
+            MSGTYPE, SENDMSG, RESULTCODE, RESULTMSG, REGDATE, MODDATE
+        )VALUES(
+            #{REQUEST_TRANID}, #{DOCID}, #{PROVIDER}, #{CI}, #{DOCHASH},
+            #{MSGTYPE}, #{SENDMSG}, #{RESULTCODE}, #{RESULTMSG}, SYSDATE, SYSDATE
+        )
+        ]]>
+    </insert>
+
+    <update id="upEdocLog" parameterType="kr.uracle.ums.core.processor.edoc.EdocProcessBean">
+        <![CDATA[
+        UPDATE
+            T_UMS_EDOC_LOG
+        SET
+            RESULTCODE	=	#{RESULTCODE},
+            RESULTMSG	= 	#{REGDATE},
+            MODDATE		=	SYSDATE
+        WHERE
+            DOCID	=	#{DOCID}
+        ]]>
+    </update>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.template.rcs">
+  
+	<select id="selectTemplate" parameterType="hashmap" resultType="kr.uracle.ums.core.vo.template.RCSTemplateVo">
+		SELECT 
+			TMPLT_ID AS "TMPLT_ID",		MESSAGEBASE_ID AS "MESSAGEBASE_ID", 	MESSAGEBASEFORM_ID AS "MESSAGEBASEFORM_ID", 	TMPLT_NAME AS "TMPLT_NAME", 	BRAND_ID AS "BRAND_ID"
+			,RCS_TYPE AS "RCS_TYPE",		NOTE AS "NOTE", 			TITLE AS "TITLE", 				CONTENT AS "CONTENT", 		BUTTONS AS "BUTTONS" 		
+			,BTYPE AS "BTYPE",			CATEGORY AS "CATEGORY", 		SERVICE AS "SERVICE", 				STATUS AS "STATUS", 		PRODUCT_CODE AS "PRODUCT_CODE"
+			,REGISTER_DATE AS "REGISTER_DATE",	APPROVAL_DATE AS "APPROVAL_DATE", 	UPDATE_DATE AS "UPDATE_DATE", 			REGISTER_ID AS "REGISTER_ID",	UPDATE_ID AS "UPDATE_ID"
+		FROM 
+			T_UMS_RCS_TEMPL
+		WHERE 
+			TMPLT_ID = #{TMPLT_ID}
+	</select>
+	
+</mapper>

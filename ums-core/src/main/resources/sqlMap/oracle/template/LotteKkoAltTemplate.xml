@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.template.allimtolk.lotte">
+    <update id="syncTemplate" parameterType="kr.uracle.ums.core.batch.vo.LotteAltTemplVo">
+        UPDATE
+            T_UMS_ALLIMTOK_TEMPL_LOTTE
+        SET
+            TEM_STAT_CODE=#{TEM_STAT_CODE}
+          ,BLOCK=#{BLOCK}
+          ,DORMANT=#{DORMANT}
+          ,APPROVAL_DATE=#{APPROVAL_DATE}
+          ,COMMENTS=#{COMMENTS}
+        WHERE TEMPLATECODE=#{TEMPLATECODE}
+    </update>
+
+    <insert id="inTemplate" parameterType="kr.uracle.ums.core.batch.vo.LotteAltTemplVo">
+        INSERT INTO T_UMS_ALLIMTOK_TEMPL_LOTTE(
+                                               TEMPLATECODE, SENDER_KEY, SENDER_TYPE, TEMPLATE_NAME, TEMPLATE_CONTENT
+                                              ,TEMPLATE_MESSAGE_TYPE, TEMPLATE_EXTRA, TEMPLATE_AD, TEMPLATE_EMPHASIZE_TYPE, TEMPLATE_TITLE
+                                              ,TEMPLATE_SUBTITLE, TEMPLATE_IMAGE_NAME, TEMPLATE_IMAGE_URL, CATEGORY_CODE, SECURITY_FLAG
+                                              ,BUTTONS, TEM_STAT_CODE, BLOCK, DORMANT, CREATE_ID
+                                              ,CREATE_DATE, APPROVAL_DATE, COMMENTS
+        )VALUES (
+                    #{TEMPLATECODE}, #{SENDER_KEY}, #{SENDER_TYPE}, #{TEMPLATE_NAME}, #{TEMPLATE_CONTENT}
+                ,#{TEMPLATE_MESSAGE_TYPE}, #{TEMPLATE_EXTRA}, #{TEMPLATE_AD}, #{TEMPLATE_EMPHASIZE_TYPE}, #{TEMPLATE_TITLE}
+                ,#{TEMPLATE_SUBTITLE}, #{TEMPLATE_IMAGE_NAME}, #{TEMPLATE_IMAGE_URL}, #{CATEGORY_CODE}, #{SECURITY_FLAG}
+                ,#{BUTTONS}, #{TEM_STAT_CODE}, #{BLOCK}, #{DORMANT}, #{CREATE_ID}
+                ,#{CREATE_DATE}, #{APPROVAL_DATE}, #{COMMENTS}
+                )
+    </insert>
+</mapper>

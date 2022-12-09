@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.template.allimtolk.lgcns">
+    <sql id="head">
+		WITH
+		PAGE_INFO AS
+		(
+		SELECT CONVERT(integer, #{pageSize}) PAGE_SIZE
+		, CONVERT(integer, #{pageNum}) PAGE_NUM
+		)
+		, LST AS
+		(
+		SELECT *
+		,		ROW_NUMBER() OVER (ORDER BY PAGE_KEY) RNUM
+		FROM
+		(
+	</sql>
+
+    <!--  tail of paging query  -->
+    <sql id="bottom">
+		) A
+		)
+		SELECT TOP (SELECT PAGE_SIZE FROM PAGE_INFO) *
+		, (SELECT COUNT(1) FROM LST) TOT_CNT
+		FROM LST
+		WHERE	PAGE_KEY NOT IN
+		(
+		SELECT TOP (((SELECT PAGE_NUM FROM PAGE_INFO)  - 1) * (SELECT PAGE_SIZE FROM PAGE_INFO) ) PAGE_KEY
+		FROM LST
+		)
+	</sql>
+    <select id="selectTemplate" parameterType="hashMap" resultType="hashmap">
+        <if test="pageNum != null"><include refid="head"/></if>
+        SELECT
+        <if test="type != 'excel'">
+            T1.KKOBIZCODE
+            ,T1.KKOBIZCODE TEMPL_ID
+            ,T1.NOTE
+            ,T1.NOTE TEMPL_NAME
+            ,T1.TEMPLATECONTENTS
+            ,T1.TEMPLATECONTENTS TEMPL_CONT
+            ,T1.SENDERKEYTYPE
+            ,T1.TEMPLATETYPE
+            ,T1.QCOMMENT
+            ,T1.BUTTONS
+            ,T1.VARS
+            ,T1.APPROVAL
+            ,T1.SINCE
+            ,T1.KKOTEMPLATECODE
+            ,T1.TEMPLATECODE
+            ,T1.COMMENTS
+            ,T1.PLUS_ID
+            ,T1.C_TYPE
+            ,T1.REG_ID
+            , ISNULL((SELECT ADMINNAME FROM T_UMS_ADMINUSER WHERE ADMINID = T1.REG_ID), T1.REG_ID) AS REG_NAME
+            ,(SELECT ALLIMTOLK_SVC_ID FROM T_UMS_PLUS_ID WHERE PLUS_ID = T1.PLUS_ID) AS ALLIMTOLK_SVC_ID
+            ,(SELECT FRIENDTOLK_SVC_ID FROM T_UMS_PLUS_ID WHERE PLUS_ID = T1.PLUS_ID) AS FRIENDTOLK_SVC_ID
+            ,CONVERT(CHAR(10),T1.REG_DT,102) AS REG_DT_YMD
+            ,CONVERT(CHAR(5),REG_DT,108) AS REG_DT_HM
+            ,CONVERT(CHAR(10),REG_DT,102) + ' ' + CONVERT(CHAR(5),REG_DT,108) AS REG_DT
+            ,ROW_NUMBER() OVER(ORDER BY REG_DT DESC) PAGE_KEY
+        </if>
+        <if test="type == 'excel'">
+            COUNT(*) AS CNT
+        </if>
+        FROM T_UMS_ALLIMTOK_TEMPL AS T1
+        WHERE 1 = 1
+        <if test="PLUS_ID !=null and PLUS_ID !=''">
+            AND T1.PLUS_ID = #{PLUS_ID}
+        </if>
+        <if test="searchValue != null and searchValue != ''">
+            <if test="searchType != ''">
+                AND T1.${searchType} LIKE '%'+#{searchValue}+'%'
+            </if>
+            <if test="searchType == ''">
+                AND (
+                T1.KKOBIZCODE LIKE '%'+#{searchValue}+'%'
+                OR T1.NOTE LIKE '%'+#{searchValue}+'%'
+                )
+            </if>
+        </if>
+        <if test="KKOBIZCODE != null">
+            AND KKOBIZCODE = #{KKOBIZCODE}
+        </if>
+        <if test="approval != null">
+            AND APPROVAL = #{approval}
+        </if>
+        <if test="approvals == 'tab1'">
+            AND (APPROVAL = 'A' OR APPROVAL = 'M')
+        </if>
+        <if test="approvals == 'tab2'">
+            AND APPROVAL = 'Y'
+        </if>
+        <if test="approvals == 'tab3'">
+            AND APPROVAL = 'R'
+        </if>
+        <if test="approvals == 'tab4'">
+            AND APPROVAL = 'I'
+        </if>
+        <if test="templeteName != null">
+            AND NOTE = #{templeteName}
+        </if>
+        <if test="cType != null and cType != ''">
+            AND C_TYPE = #{cType}
+        </if>
+        <if test="pageNum != null"><include refid="bottom"/></if>
+    </select>
+
+    <select id="selTemplateSince" resultType="hashmap">
+		SELECT
+			  ISNULL(MAX(SINCE), '19000101000000') AS "since"
+			,'1' AS "page"
+		FROM T_UMS_ALLIMTOK_TEMPL
+	</select>
+    <insert id="insTemplateReg" parameterType="hashmap">
+        INSERT INTO T_UMS_ALLIMTOK_TEMPL (
+        KKOBIZCODE
+        ,NOTE
+        ,TEMPLATECONTENTS
+        ,APPROVAL
+        ,PLUS_ID
+        ,C_TYPE
+        <if test="senderKeyType != null">
+            ,SENDERKEYTYPE
+        </if>
+        <if test="templateType != null">
+            ,TEMPLATETYPE
+        </if>
+        <if test="comment != null">
+            ,QCOMMENT
+        </if>
+        <if test="strButtons != null">
+            ,BUTTONS
+        </if>
+        <if test="strVars != null">
+            ,VARS
+        </if>
+        <if test="since != null">
+            ,SINCE
+        </if>
+        <if test="strComments != null">
+            ,COMMENTS
+        </if>
+        <if test="kkoTemplateCode != null">
+            ,KKOTEMPLATECODE
+        </if>
+        <if test="templateCode != null">
+            ,TEMPLATECODE
+        </if>
+        ,REG_ID
+        ,REG_DT
+        ) VALUES (
+        #{kkoBizCode}
+        ,#{templeteName}
+        ,#{templeteContet}
+        ,#{approval}
+        ,#{plusId}
+        ,#{cType}
+        <if test="senderKeyType != null">
+            ,#{senderKeyType}
+        </if>
+        <if test="templateType != null">
+            ,#{templateType}
+        </if>
+        <if test="comment != null">
+            ,#{comment}
+        </if>
+        <if test="strButtons != null">
+            ,#{strButtons}
+        </if>
+        <if test="strVars != null">
+            ,#{strVars}
+        </if>
+        <if test="since != null">
+            ,#{since}
+        </if>
+        <if test="strComments != null">
+            ,#{strComments}
+        </if>
+        <if test="kkoTemplateCode != null">
+            ,#{kkoTemplateCode}
+        </if>
+        <if test="templateCode != null">
+            ,#{templateCode}
+        </if>
+        ,#{regId}
+        ,GETDATE()
+        )
+    </insert>
+    <update id="syncTemplate" parameterType="hashmap">
+        UPDATE T_UMS_ALLIMTOK_TEMPL
+        SET  MOD_DT = GETDATE()
+        ,APPROVAL = #{approval}
+        <if test="templateContents != null">
+            ,TEMPLATECONTENTS = #{templateContents}
+        </if>
+        <if test="note != null">
+            ,NOTE = #{note}
+        </if>
+        <if test="senderKeyType != null">
+            ,SENDERKEYTYPE = #{senderKeyType}
+        </if>
+        <if test="buttons != null">
+            ,BUTTONS = #{buttons}
+        </if>
+        <if test="since != null">
+            ,SINCE = #{since}
+        </if>
+        <if test="kkoBizCodeNew != null">
+            ,KKOBIZCODE = #{kkoBizCodeNew}
+        </if>
+        <if test="kkoTemplateCode != null">
+            ,KKOTEMPLATECODE = #{kkoTemplateCode}
+        </if>
+        <if test="templateCode != null">
+            ,TEMPLATECODE = #{templateCode}
+        </if>
+        <if test="comments != null">
+            ,COMMENTS = #{comments}
+        </if>
+        WHERE KKOBIZCODE = #{kkoBizCode}
+    </update>
+
+    <update id="syncTemplate2" parameterType="hashmap">
+		UPDATE T_UMS_ALLIMTOK_TEMPL
+		SET  APPROVAL = #{approval}
+		,SINCE = #{since}
+		,COMMENTS = #{comments}
+		,MOD_DT = GETDATE()
+		WHERE KKOBIZCODE = #{kkoBizCode}
+	</update>
+
+    <insert id="insTemplateReg2" parameterType="kr.uracle.ums.core.vo.SyncAltTemplVo">
+		INSERT INTO T_UMS_ALLIMTOK_TEMPL
+		(KKOBIZCODE,NOTE,TEMPLATECONTENTS,SENDERKEYTYPE
+		,TEMPLATETYPE,QCOMMENT,BUTTONS,VARS
+		,APPROVAL,SINCE,KKOTEMPLATECODE,TEMPLATECODE
+		,COMMENTS,PLUS_ID,C_TYPE,REG_DT,REG_ID,MOD_DT)
+		VALUES (#{KKOBIZCODE},#{NOTE},#{TEMPLATECONTENTS},#{SENDERKEYTYPE}
+		,#{TEMPLATETYPE},#{QCOMMENT},#{BUTTONS},#{VARS}
+		,#{APPROVAL},#{SINCE},#{KKOTEMPLATECODE},#{TEMPLATECODE}
+		,#{COMMENTS},#{PLUS_ID},#{C_TYPE},GETDATE(),'BATCH',GETDATE())
+	</insert>
+
+    <update id="upTemplateReg2" parameterType="kr.uracle.ums.core.vo.SyncAltTemplVo">
+		UPDATE T_UMS_ALLIMTOK_TEMPL
+		SET  MOD_DT = GETDATE()
+		,APPROVAL = #{APPROVAL}
+		,TEMPLATECONTENTS = #{TEMPLATECONTENTS}
+		,NOTE = #{NOTE}
+		,SENDERKEYTYPE = #{SENDERKEYTYPE}
+		,BUTTONS = #{BUTTONS}
+		,VARS = #{VARS}
+		,SINCE = #{SINCE}
+		,KKOBIZCODE = #{KKOBIZCODE}
+		,KKOTEMPLATECODE = #{KKOTEMPLATECODE}
+		,TEMPLATECODE = #{TEMPLATECODE}
+		,COMMENTS = #{COMMENTS}
+		WHERE KKOBIZCODE = #{KKOBIZCODE}
+	</update>
+
+    <update id="upRelease" parameterType="java.lang.String">
+		UPDATE T_UMS_ALLIMTOK_TEMPL SET  APPROVAL = 'A' WHERE KKOBIZCODE=#{KKOBIZCODE}
+	</update>
+
+    <update id="upDelAltTempl" parameterType="hashmap">
+		UPDATE T_UMS_ALLIMTOK_TEMPL SET APPROVAL = 'D' WHERE KKOBIZCODE=#{KKOBIZCODE}
+	</update>
+
+    <select id="selDelTemplate" parameterType="hashmap" resultType="hashmap">
+		SELECT KKOBIZCODE FROM T_UMS_ALLIMTOK_TEMPL WHERE APPROVAL='D'
+	</select>
+</mapper>

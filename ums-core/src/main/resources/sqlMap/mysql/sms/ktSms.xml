@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.sms.kt">
+    <insert id="inSmsSend" parameterType="kr.uracle.ums.codec.redis.vo.sms.KtSmsProcessBean">
+        <![CDATA[
+        INSERT INTO SDK_SMS_SEND(
+	        USER_ID,	        SCHEDULE_TYPE,
+	        SUBJECT,	       	SMS_MSG,			CALLBACK_URL,
+	        NOW_DATE,	        SEND_DATE,		    CALLBACK,
+	        DEST_TYPE,		    DEST_COUNT,		    DEST_INFO,
+	        KT_OFFICE_CODE,	    CDR_ID,			    RESERVED9,
+	        SEND_STATUS,        SEND_COUNT,		    SEND_RESULT,
+            STD_ID
+        )
+        VALUES(
+	        #{USER_ID},	        	#{SCHEDULE_TYPE},
+	        #{TITLE},	        	#{MSG_BODY},        	#{CALLBACK_URL},
+	        #{NOW_DATE},	        #{SEND_DATE},	        #{CALLBACK_NUM},
+	        #{DEST_TYPE},	        #{DEST_COUNT},	        #{DEST_INFO},
+	        #{KT_OFFICE_CODE},		#{CDR_ID},	        	#{TRANSACTION_KEY},
+	        #{SEND_STATUS},	        #{SEND_COUNT},	        #{SEND_RESULT},
+            #{MASTERTABLE_SEQNO}
+        )
+        ]]>
+    </insert>
+    <insert id="inSmsSendDynamic" parameterType="kr.uracle.ums.codec.redis.vo.sms.KtSmsProcessBean">
+        <![CDATA[
+        INSERT INTO ${TABLE_NAME}(
+	        USER_ID,	        SCHEDULE_TYPE,
+	        SUBJECT,	       	SMS_MSG,			CALLBACK_URL,
+	        NOW_DATE,	        SEND_DATE,		    CALLBACK,
+	        DEST_TYPE,		    DEST_COUNT,		    DEST_INFO,
+	        KT_OFFICE_CODE,	    CDR_ID,			    RESERVED9,
+	        SEND_STATUS,        SEND_COUNT,		    SEND_RESULT,
+            STD_ID
+        )
+        VALUES(
+	        #{USER_ID},	        	#{SCHEDULE_TYPE},
+	        #{TITLE},	        	#{MSG_BODY},        	#{CALLBACK_URL},
+	        #{NOW_DATE},	        #{SEND_DATE},	        #{CALLBACK_NUM},
+	        #{DEST_TYPE},	        #{DEST_COUNT},	        #{DEST_INFO},
+	        #{KT_OFFICE_CODE},		#{CDR_ID},	        	#{TRANSACTION_KEY},
+	        #{SEND_STATUS},	        #{SEND_COUNT},	        #{SEND_RESULT},
+            #{MASTERTABLE_SEQNO}
+        )
+        ]]>
+    </insert>
+
+    <insert id="inMmsSend" parameterType="kr.uracle.ums.codec.redis.vo.sms.KtSmsProcessBean">
+        <![CDATA[
+        INSERT INTO SDK_MMS_SEND(
+            USER_ID,			SCHEDULE_TYPE,
+            SUBJECT,           	NOW_DATE,			SEND_DATE,
+            CALLBACK,          	DEST_COUNT,		    DEST_INFO,
+            MMS_MSG,
+            KT_OFFICE_CODE,    	CDR_ID,	            RESERVED9,
+            SEND_STATUS,        SEND_COUNT,			SEND_RESULT,
+            MSG_TYPE,           STD_ID
+        )
+        VALUES(
+            #{USER_ID},				#{SCHEDULE_TYPE},
+            #{TITLE},				#{NOW_DATE},			#{SEND_DATE},
+            #{CALLBACK_NUM},		#{DEST_COUNT},			#{DEST_INFO},
+            #{MSG_BODY},
+            #{KT_OFFICE_CODE},		#{CDR_ID},				#{TRANSACTION_KEY},
+            #{SEND_STATUS},         #{SEND_COUNT},			#{SEND_RESULT},
+            0,                      #{MASTERTABLE_SEQNO}
+        )
+        ]]>
+    </insert>
+    <insert id="inMmsSendDynamic" parameterType="kr.uracle.ums.codec.redis.vo.sms.KtSmsProcessBean">
+        <![CDATA[
+        INSERT INTO ${TABLE_NAME}(
+            USER_ID,			SCHEDULE_TYPE,
+            SUBJECT,           	NOW_DATE,			SEND_DATE,
+            CALLBACK,          	DEST_COUNT,		    DEST_INFO,
+            MMS_MSG,
+            KT_OFFICE_CODE,    	CDR_ID,	            RESERVED9,
+            SEND_STATUS,        SEND_COUNT,			SEND_RESULT,
+            MSG_TYPE,           STD_ID
+        )
+        VALUES(
+            #{USER_ID},				#{SCHEDULE_TYPE},
+            #{TITLE},				#{NOW_DATE},			#{SEND_DATE},
+            #{CALLBACK_NUM},		#{DEST_COUNT},			#{DEST_INFO},
+            #{MSG_BODY},
+            #{KT_OFFICE_CODE},		#{CDR_ID},				#{TRANSACTION_KEY},
+            #{SEND_STATUS},         #{SEND_COUNT},			#{SEND_RESULT},
+            0,                      #{MASTERTABLE_SEQNO}
+        )
+        ]]>
+    </insert>
+</mapper>

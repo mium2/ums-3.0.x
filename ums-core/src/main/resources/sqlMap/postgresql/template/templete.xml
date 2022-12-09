@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.templete">
+	<delete id="deleteTemplate" parameterType="hashmap">
+		DELETE FROM "T_UMS_TEMPL"
+		WHERE "S_TYPE" = #{sType}
+		  AND "TEMPL_ID" IN
+		<foreach item="item" index="index" collection="templIds" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="selTemplateForCache" parameterType="hashmap" resultType="kr.uracle.ums.core.vo.template.CommonTemplateVo">
+		SELECT
+			"TEMPL_ID"				,"TEMPL_NAME"		,"TEMPL_CONT"
+			,"VARS"			    	,"CHANNEL_CODE"		,"TITLE"
+			,"EXT"					,"IMAGE_FILE"		,"IMAGE_URL"
+			,"VIDIO_URL"			,"PLUS_ID"			,"BUTTONS"
+			,"UNSUBSCRIBE"	    	,"BADGE_YN"		    ,"SENDER_NUMBER"
+			,"IMAGE_SIZE_TYPE"		,"BRAND_ID"			,"CHANNEL_SUB_CODE"
+			,"IMAGE_LANDING_URL"	,"APP_ID"			,"REG_ID"
+			,"MOD_ID"
+		FROM
+			"T_UMS_TEMPL"
+		WHERE
+			"TEMPL_ID" = #{TEMPL_ID}
+	</select>
+</mapper>

@@ -1,0 +1,57 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.statistics.send">
+
+    <select id="selStaticSendOne" parameterType="kr.uracle.ums.core.processor.bean.StatisticsBean" resultType="kr.uracle.ums.core.processor.bean.StatisticsBean">
+        <![CDATA[
+        SELECT 
+        	"SENDERSYSTEM",	    "SENDDATE",	    "SENDERID",	
+        	"SENDERGROUP",	    "SENDTYPE",     "RS_CNT",		
+        	"SS_CNT",	        "FS_CNT",	    "FF_CNT",		
+        	"ROOT_CHANNEL_YN",  "DETAIL_SENDTYPE" 
+        FROM 
+        	"T_UMS_SEND_STATISTICS"
+        WHERE 
+        	"SENDERSYSTEM"      = #{SENDERSYSTEM} 
+        AND "SENDDATE"          = #{SENDDATE} 
+        AND "SENDERID"          = #{SENDERID} 
+        AND "DETAIL_SENDTYPE"   = #{DETAIL_SENDTYPE} 
+        AND "OPTIONAL"          = #{OPTIONAL}
+        AND "ROOT_CHANNEL_YN"   = #{ROOT_CHANNEL_YN}
+        ]]>
+    </select>
+    <insert id="inStaticSend" parameterType="kr.uracle.ums.core.processor.bean.StatisticsBean">
+        <![CDATA[
+        INSERT INTO "T_UMS_SEND_STATISTICS"(
+        	"SENDERSYSTEM",	    "SENDDATE",	        "SENDERID",	
+            "OPTIONAL",	        "SENDERGROUP",      "SENDTYPE",
+        	"RS_CNT",		    "SS_CNT",	        "FS_CNT",	
+            "FF_CNT",	        "ROOT_CHANNEL_YN",  "DETAIL_SENDTYPE" 
+        )
+        VALUES (
+        	#{SENDERSYSTEM},	#{SENDDATE},	        #{SENDERID},	
+            #{OPTIONAL},	    #{SENDERGROUP},		    #{SENDTYPE},
+        	#{RS_CNT},			#{SS_CNT},		        #{FS_CNT},		
+            #{FF_CNT},		    #{ROOT_CHANNEL_YN},     #{DETAIL_SENDTYPE}
+        )
+        ]]>
+    </insert>
+
+    <update id="upStaticCount" parameterType="kr.uracle.ums.core.processor.bean.StatisticsBean">
+        <![CDATA[
+        UPDATE 
+        	"T_UMS_SEND_STATISTICS" 
+        SET 
+        	"RS_CNT" = "RS_CNT"+#{RS_CNT},			
+			"SS_CNT" = "SS_CNT"+#{SS_CNT},		
+			"FS_CNT" = "FS_CNT"+#{FS_CNT},		
+			"FF_CNT" = "FF_CNT"+#{FF_CNT}
+        WHERE 
+        	"SENDERSYSTEM"      = #{SENDERSYSTEM}
+        AND "SENDDATE"          = #{SENDDATE}
+        AND "SENDERID"          = #{SENDERID}
+        AND "DETAIL_SENDTYPE"   = #{DETAIL_SENDTYPE}
+        AND "OPTIONAL"          = #{OPTIONAL}
+        AND "ROOT_CHANNEL_YN"   = #{ROOT_CHANNEL_YN}
+        ]]>
+    </update>
+</mapper>

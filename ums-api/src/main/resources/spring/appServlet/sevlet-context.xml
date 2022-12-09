@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties" ref="myProperties" />
+    </bean>
+
+    <!-- interceptors  -->
+    <!--
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/api/*.ums" />
+            <mvc:exclude-mapping path="/login.ums"/>
+            <bean class="kr.uracle.ums.core.interceptor.CheckHandlerInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    -->
+    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="0"/>
+    </bean>
+
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="2"></property>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--파일업로드를 위한 리졸브 이렇게 선언하면 controller에서 MultipartHttpServletRequest 로 받아서 사용하면 됨-->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="2000000000"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+</beans>

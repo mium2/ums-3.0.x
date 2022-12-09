@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mms.lgu">
+    <insert id="inMmsSend" parameterType="kr.uracle.ums.codec.redis.vo.mms.LguMmsProcessBean">
+        <![CDATA[
+        INSERT INTO MMS_MSG(
+        	MSGKEY,                 SUBJECT, 			    PHONE,          	    CALLBACK,
+            STATUS, 			    REQDATE,        	    MSG,
+            FILE_CNT, 		        FILE_CNT_REAL,     	    FILE_PATH1,
+            FILE_PATH2,	            FILE_PATH3,             FILE_PATH4,
+            FILE_PATH5,	            EXPIRETIME,        	    TYPE,
+            ID,                     POST,           	    ETC6
+        )
+        VALUES(
+        	MMS_MSG_SEQ.NEXTVAL,    #{TITLE},		        #{MOBILE_NUM},          #{CALLBACK_NUM},
+            #{STATUS},		        SYSDATE,              	#{MSG_BODY},
+            #{FILE_CNT},	        #{FILE_CNT_REAL},       #{FILE_PATH1},
+            #{FILE_PATH2},	        #{FILE_PATH3},	        #{FILE_PATH4},
+            #{FILE_PATH5},	        #{EXPIRETIME},          #{TYPE},
+            #{SENDERID},            #{SENDGROUPCODE},       #{TRANSACTION_KEY}
+        )
+        ]]>
+    </insert>
+
+    <insert id="inMmsSendDynamic" parameterType="kr.uracle.ums.codec.redis.vo.mms.LguMmsProcessBean">
+        <![CDATA[
+        INSERT INTO ${TABLE_NAME}(
+            MSGKEY,                 SUBJECT, 			    PHONE,          	    CALLBACK,
+            STATUS, 			    REQDATE,        	    MSG,
+            FILE_CNT, 		        FILE_CNT_REAL,     	    FILE_PATH1,
+            FILE_PATH2,	            FILE_PATH3,             FILE_PATH4,
+            FILE_PATH5,	            EXPIRETIME,        	    TYPE,
+            ID,                     POST,           	    ETC6
+        )
+        VALUES(
+            MMS_MSG_SEQ.NEXTVAL,    #{TITLE},		        #{MOBILE_NUM},          #{CALLBACK_NUM},
+            #{STATUS},		        SYSDATE,              	#{MSG_BODY},
+            #{FILE_CNT},	        #{FILE_CNT_REAL},       #{FILE_PATH1},
+            #{FILE_PATH2},	        #{FILE_PATH3},	        #{FILE_PATH4},
+            #{FILE_PATH5},	        #{EXPIRETIME},          #{TYPE},
+            #{SENDERID},            #{SENDGROUPCODE},       #{TRANSACTION_KEY}
+        )
+        ]]>
+    </insert>
+</mapper>

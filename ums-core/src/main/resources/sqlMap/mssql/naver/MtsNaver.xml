@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.naver.mts">
+    <select id="selTemplate" parameterType="hashmap" resultType="kr.uracle.ums.core.vo.template.NaverTemplateVo">
+        <![CDATA[
+        SELECT TMPL_CD, TMPL_NAME, MSG, BUTTON, NAVER_PROFILE, TMPL_KIND, STATUS
+        FROM T_UMS_NAVER_TEMPL
+        WHERE TMPL_CD=#{TMPL_CD}
+        ]]>
+    </select>
+
+    <insert id="inNaverSendMsg" parameterType="kr.uracle.ums.codec.redis.vo.naver.MtsNaverProcessBean">
+        <selectKey keyProperty="TRAN_PR" resultType="long" order="BEFORE">
+            SELECT SEQ_UMS_MST_NAVER.NEXTVAL FROM DUAL
+        </selectKey>
+        <![CDATA[
+            INSERT INTO MTS_NAVER_MSG (
+            TRAN_PR,
+            TRAN_REFKEY,
+            TRAN_SENDER_KEY,
+            TRAN_TMPL_CD,
+            TRAN_BUTTON,
+            TRAN_PHONE,
+            TRAN_MSG,
+            TRAN_TMPL_PARAMS,
+            TRAN_DATE,
+            TRAN_TYPE,
+            TRAN_STATUS,
+            TRAN_CALLBACK,
+            TRAN_SUBJECT,
+            TRAN_REPLACE_MSG,
+            TRAN_REPLACE_TYPE,
+            TRAN_ETC1,
+            TRAN_ETC2,
+            TRAN_ETC3,
+            TRAN_ETC4,
+            TRAN_USER_NAME,
+            TRAN_USER_ACCESS_TOKEN,
+            TRAN_GROUP_KEY
+            ) VALUES (
+            #{TRAN_PR},
+            #{TRAN_REFKEY},
+            #{TRAN_SENDER_KEY},
+            #{TRAN_TMPL_CD},
+            #{TRAN_BUTTON},
+            #{TRAN_PHONE},
+            #{TRAN_MSG},
+            #{TRAN_TMPL_PARAMS},
+            GETDATE(),
+            #{TRAN_TYPE},
+            #{TRAN_STATUS},
+            #{TRAN_CALLBACK},
+            #{TRAN_SUBJECT},
+            #{TRAN_MSG},
+            #{TRAN_REPLACE_TYPE},
+            #{TRAN_ETC1},
+            #{TRAN_ETC2},
+            #{TRAN_ETC3},
+            #{TRAN_ETC4},
+            #{TRAN_USER_NAME},
+            #{TRAN_USER_ACCESS_TOKEN},
+            #{TRAN_GROUP_KEY})
+        ]]>
+    </insert>
+</mapper>

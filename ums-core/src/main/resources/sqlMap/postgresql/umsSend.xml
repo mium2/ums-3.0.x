@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.ums.send">
+    <insert id="inUmsSendMsgBatch" parameterType="kr.uracle.ums.core.service.bean.UmsSendMsgBean">
+        <selectKey keyProperty="UMS_SEQNO" resultType="long" order="BEFORE">
+             SELECT NEXTVAL('"SEQ_UMS_SEND_BATCH"')
+        </selectKey>
+        <![CDATA[
+        INSERT INTO "T_UMS_SEND_BATCH"(
+			 "UMS_SEQNO"
+			,"MSG_TYPE", 				"TRANS_TYPE", 			"TITLE",				"APP_ID", 				"ATTACHFILE"
+			,"PUSH_MSG", 				"SOUNDFILE",			"BADGENO", 				"PRIORITY", 			"EXT"
+			,"SENDERCODE", 				"SERVICECODE", 			"RESERVEDATE", 			"TARGET_USER_TYPE",		"DB_IN",				 "PUSH_TYPE"
+			,"PUSH_FAIL_SMS_SEND", 		"PUSH_FAIL_WAIT_MIN",	"SPLIT_MSG_CNT",		"DELAY_SECOND", 		"ALLIMTOLK_TEMPLCODE",   "ALLIMTALK_MSG"
+			,"WPUSH_DOMAIN",			"WPUSH_TEMPL_ID",		"WPUSH_TITLE",			"WPUSH_MSG",			"WPUSH_ICON"	
+			,"WPUSH_LINK",				"WPUSH_EXT",			"WPUSH_BADGENO"				 
+			,"FRIENDTOLK_MSG",			"SMS_MSG",				"TOTAL_CNT",			"REGDATE"
+			,"KKOALT_SVCID",			"KKOFRT_SVCID",			"CALLBACK_NUM",			"START_SEND_KIND",		"SENDERID"
+			,"SENDGROUPCODE",			"PLUS_ID",				"PUSH_TEMPL_ID",		"FRT_TEMPL_ID",			"SMS_TEMPL_ID"
+			,"RESERVE_SEQNO",			"KKO_BTNS",				"KKO_IMG_PATH",			"KKO_IMG_LINK_URL",		"MMS_IMGURL"
+			,"SMS_TITLE",				"REPLACE_VARS",			"RCS_TITLE",			"RCS_MSG",				"IMG_GROUP_KEY"
+			,"IMG_GROUP_CNT",			"RCS_TEMPL_ID",			"BRAND_ID",				"RCS_OBJECT",			"BTN_OBJECT"
+			,"RCS_TYPE",				"FOOTER",				"COPY_ALLOWED",			"EXPIRY_OPTION",		"RCS_MSGBASE_ID"
+			,"RCS_BTN_CNT",				"RCS_BTN_TYPE",			"RCS_MMS_INFO",			"RCS_IMG_PATH"
+			,"NAVER_TEMPL_ID",          "NAVER_PROFILE",        "NAVER_MSG",          	"NAVER_BUTTONS",      	"NAVER_PARTNERKEY",     "NAVER_IMGHASH"
+			,"SEND_MACRO_CODE",         "SEND_MACRO_ORDER",		"CUST_TRANSGROUPKEY",	"CUST_TRANSKEY",		"MIN_START_TIME",		"MAX_END_TIME"
+			,"FATIGUE_YN"
+			,"VAR1",					"VAR2",					"VAR3",					"VAR4",					"VAR5"
+			,"VAR6",					"VAR7",					"VAR8",					"VAR9",                 "ADMIN_MSG_ID",         "KKO_TITLE"
+        )
+        VALUES (
+        	 #{UMS_SEQNO}
+			,#{MSG_TYPE},				            #{TRANS_TYPE},			#{TITLE},				                #{APP_ID},				            #{ATTACHFILE}
+			,#{PUSH_MSG},				            #{SOUNDFILE},			CAST(#{BADGENO} AS NUMERIC),            CAST(#{PRIORITY} AS NUMERIC),		#{EXT}
+			,#{SENDERCODE},				            #{SERVICECODE},			#{RESERVEDATE},			                #{TARGET_USER_TYPE},	            #{DB_IN},				    #{PUSH_TYPE}
+			,#{PUSH_FAIL_SMS_SEND},		            #{PUSH_FAIL_WAIT_MIN},	CAST(#{SPLIT_MSG_CNT} AS NUMERIC),      CAST(#{DELAY_SECOND} AS NUMERIC),   #{ALLIMTOLK_TEMPLCODE},	    #{ALLIMTALK_MSG}
+			,#{WPUSH_DOMAIN},			            #{WPUSH_TEMPL_ID},		#{WPUSH_TITLE},			                #{WPUSH_MSG},			            #{WPUSH_ICON}	
+			,#{WPUSH_LINK},				            #{WPUSH_EXT},			CAST(#{WPUSH_BADGENO} AS NUMERIC)			
+			,#{FRIENDTOLK_MSG},			            #{SMS_MSG},				#{TOTAL_CNT},			                NOW()
+			,#{KKOALT_SVCID},			            #{KKOFRT_SVCID},		#{CALLBACK_NUM},		                #{START_SEND_KIND},		            #{SENDERID}
+			,#{SENDGROUPCODE},			            #{PLUS_ID},				#{PUSH_TEMPL_ID},		                #{FRT_TEMPL_ID},		            #{SMS_TEMPL_ID}
+			,CAST(#{RESERVE_SEQNO} AS NUMERIC),     #{KKO_BTNS},			#{KKO_IMG_PATH},		                #{KKO_IMG_LINK_URL},	            #{MMS_IMGURL}
+			,#{SMS_TITLE},				            #{REPLACE_VARS},		#{RCS_TITLE},			                #{RCS_MSG},				            #{IMG_GROUP_KEY}
+			,#{IMG_GROUP_CNT},			            #{RCS_TEMPL_ID},		#{BRAND_ID},			                #{RCS_OBJECT},			            #{BTN_OBJECT}
+			,#{RCS_TYPE},				            #{FOOTER},				#{COPY_ALLOWED},		                #{EXPIRY_OPTION},		            #{RCS_MSGBASE_ID}
+        	,#{RCS_BTN_CNT},			            #{RCS_BTN_TYPE},		#{RCS_MMS_INFO},		                #{RCS_IMG_PATH_JSON}
+        	,#{NAVER_TEMPL_ID},                     #{NAVER_PROFILE},       #{NAVER_MSG},       	                #{NAVER_BUTTONS},      	            #{NAVER_PARTNERKEY},   	#{NAVER_IMGHASH}
+        	,#{SEND_MACRO_CODE},                    #{SEND_MACRO_ORDER},	#{CUST_TRANSGROUPKEY},	                #{CUST_TRANSKEY},		            #{MIN_START_TIME},		#{MAX_END_TIME}
+        	,#{FATIGUE_YN}
+        	,#{VAR1},					            #{VAR2},				#{VAR3},				                #{VAR4},				            #{VAR5}
+        	,#{VAR6},					            #{VAR7},				#{VAR8},				                #{VAR9},                            #{ADMIN_MSG_ID},        #{KKO_TITLE}
+        )
+        ]]>
+    </insert>
+
+    <insert id="inUmsSendMsgReal" parameterType="kr.uracle.ums.core.service.bean.UmsSendMsgBean">
+        <selectKey keyProperty="UMS_SEQNO" resultType="long" order="BEFORE">
+             SELECT NEXTVAL('"SEQ_UMS_SEND_REAL"')
+        </selectKey>
+        <![CDATA[
+        INSERT INTO "T_UMS_SEND_REAL"(
+			 "UMS_SEQNO"
+			,"MSG_TYPE", 				"TRANS_TYPE", 			"TITLE",				"APP_ID", 				"ATTACHFILE"
+			,"PUSH_MSG", 				"SOUNDFILE",			"BADGENO", 				"PRIORITY", 			"EXT"
+			,"SENDERCODE", 				"SERVICECODE", 			"RESERVEDATE", 			"TARGET_USER_TYPE",		"DB_IN",				 "PUSH_TYPE"
+			,"PUSH_FAIL_SMS_SEND", 		"PUSH_FAIL_WAIT_MIN",	"SPLIT_MSG_CNT",		"DELAY_SECOND", 		"ALLIMTOLK_TEMPLCODE",   "ALLIMTALK_MSG"
+			,"WPUSH_DOMAIN",			"WPUSH_TEMPL_ID",		"WPUSH_TITLE",			"WPUSH_MSG",			"WPUSH_ICON"	
+			,"WPUSH_LINK",				"WPUSH_EXT",			"WPUSH_BADGENO"				 
+			,"FRIENDTOLK_MSG",			"SMS_MSG",				"TOTAL_CNT",			"REGDATE"
+			,"KKOALT_SVCID",			"KKOFRT_SVCID",			"CALLBACK_NUM",			"START_SEND_KIND",		"SENDERID"
+			,"SENDGROUPCODE",			"PLUS_ID",				"PUSH_TEMPL_ID",		"FRT_TEMPL_ID",			"SMS_TEMPL_ID"
+			,"RESERVE_SEQNO",			"KKO_BTNS",				"KKO_IMG_PATH",			"KKO_IMG_LINK_URL",		"MMS_IMGURL"
+			,"SMS_TITLE",				"REPLACE_VARS",			"RCS_TITLE",			"RCS_MSG",				"IMG_GROUP_KEY"
+			,"IMG_GROUP_CNT",			"RCS_TEMPL_ID",			"BRAND_ID",				"RCS_OBJECT",			"BTN_OBJECT"
+			,"RCS_TYPE",				"FOOTER",				"COPY_ALLOWED",			"EXPIRY_OPTION",		"RCS_MSGBASE_ID"
+			,"RCS_BTN_CNT",				"RCS_BTN_TYPE",			"RCS_MMS_INFO",			"RCS_IMG_PATH"
+			,"NAVER_TEMPL_ID",          "NAVER_PROFILE",        "NAVER_MSG",          	"NAVER_BUTTONS",      	"NAVER_PARTNERKEY",     "NAVER_IMGHASH"
+			,"SEND_MACRO_CODE",         "SEND_MACRO_ORDER",		"CUST_TRANSGROUPKEY",	"CUST_TRANSKEY",		"MIN_START_TIME",		"MAX_END_TIME"
+			,"FATIGUE_YN"
+			,"VAR1",					"VAR2",					"VAR3",					"VAR4",					"VAR5"
+			,"VAR6",					"VAR7",					"VAR8",					"VAR9",                 "ADMIN_MSG_ID",         "KKO_TITLE"
+		)
+        VALUES (
+             #{UMS_SEQNO}
+        	,#{MSG_TYPE},				            #{TRANS_TYPE},			#{TITLE},				                #{APP_ID},				            #{ATTACHFILE}
+			,#{PUSH_MSG},				            #{SOUNDFILE},			CAST(#{BADGENO} AS NUMERIC),            CAST(#{PRIORITY} AS NUMERIC),       #{EXT}
+			,#{SENDERCODE},				            #{SERVICECODE},			#{RESERVEDATE},			                #{TARGET_USER_TYPE},	            #{DB_IN},				    #{PUSH_TYPE}
+			,#{PUSH_FAIL_SMS_SEND},		            #{PUSH_FAIL_WAIT_MIN},	CAST(#{SPLIT_MSG_CNT} AS NUMERIC),      CAST(#{DELAY_SECOND} AS NUMERIC),   #{ALLIMTOLK_TEMPLCODE},     #{ALLIMTALK_MSG}
+			,#{WPUSH_DOMAIN},			            #{WPUSH_TEMPL_ID},		#{WPUSH_TITLE},			                #{WPUSH_MSG},                       #{WPUSH_ICON}	
+			,#{WPUSH_LINK},				            #{WPUSH_EXT},			CAST(#{WPUSH_BADGENO} AS NUMERIC)			
+			,#{FRIENDTOLK_MSG},			            #{SMS_MSG},				#{TOTAL_CNT},			                NOW()
+			,#{KKOALT_SVCID},			            #{KKOFRT_SVCID},		#{CALLBACK_NUM},		                #{START_SEND_KIND},		            #{SENDERID}
+			,#{SENDGROUPCODE},			            #{PLUS_ID},				#{PUSH_TEMPL_ID},		                #{FRT_TEMPL_ID},		            #{SMS_TEMPL_ID}
+			,CAST(#{RESERVE_SEQNO} AS NUMERIC),     #{KKO_BTNS},			#{KKO_IMG_PATH},		                #{KKO_IMG_LINK_URL},	            #{MMS_IMGURL}
+			,#{SMS_TITLE},				            #{REPLACE_VARS},		#{RCS_TITLE},			                #{RCS_MSG},				            #{IMG_GROUP_KEY}
+			,#{IMG_GROUP_CNT},			            #{RCS_TEMPL_ID},		#{BRAND_ID},			                #{RCS_OBJECT},			            #{BTN_OBJECT}
+			,#{RCS_TYPE},				            #{FOOTER},				#{COPY_ALLOWED},		                #{EXPIRY_OPTION},		            #{RCS_MSGBASE_ID}
+        	,#{RCS_BTN_CNT},			            #{RCS_BTN_TYPE},		#{RCS_MMS_INFO},		                #{RCS_IMG_PATH_JSON}
+        	,#{NAVER_TEMPL_ID},                     #{NAVER_PROFILE},       #{NAVER_MSG},       	                #{NAVER_BUTTONS},      	            #{NAVER_PARTNERKEY},   	    #{NAVER_IMGHASH}
+        	,#{SEND_MACRO_CODE},                    #{SEND_MACRO_ORDER},	#{CUST_TRANSGROUPKEY},	                #{CUST_TRANSKEY},		            #{MIN_START_TIME},		    #{MAX_END_TIME}
+        	,#{FATIGUE_YN}
+			,#{VAR1},					            #{VAR2},				#{VAR3},				                #{VAR4},				            #{VAR5}
+			,#{VAR6},					            #{VAR7},				#{VAR8},				                #{VAR9},                            #{ADMIN_MSG_ID},            #{KKO_TITLE}
+        )
+        ]]>
+    </insert>
+
+    <insert id="inReserveUms" parameterType="kr.uracle.ums.core.service.bean.UmsReserveMsgBean">
+        <selectKey keyProperty="RESERVE_SEQNO" resultType="String" order="BEFORE">
+            SELECT NEXTVAL('"SEQ_UMS_RESERVE"')
+        </selectKey>
+        <![CDATA[
+        INSERT INTO "T_UMS_RESERVE"(
+        	 "RESERVE_SEQNO"
+        	,"TRANS_TYPE",			"MSG_TYPE",				"TITLE",				"APP_ID",				"ATTACHFILE"
+        	,"PUSH_MSG",			"SOUNDFILE",			"BADGENO",				"PRIORITY",				"EXT"
+        	,"SENDERCODE",			"SERVICECODE",			"RESERVEDATE",			"TARGET_USER_TYPE",		"DB_IN",				"PUSH_TYPE"
+        	,"PUSH_FAIL_SMS_SEND",	"PUSH_FAIL_WAIT_MIN",	"SPLIT_MSG_CNT",		"DELAY_SECOND",			"ALLIMTOLK_TEMPLCODE",  "ALLIMTALK_MSG"
+			,"WPUSH_DOMAIN",		"WPUSH_TEMPL_ID",		"WPUSH_TITLE",			"WPUSH_MSG",			"WPUSH_ICON"	
+			,"WPUSH_LINK",			"WPUSH_EXT",			"WPUSH_BADGENO"	        	
+        	,"FRIENDTOLK_MSG",		"SMS_MSG",				"KKOALT_SVCID",			"KKOFRT_SVCID",			"CALLBACK_NUM"
+        	,"START_SEND_KIND",		"SENDERID",				"SENDGROUPCODE",		"PLUS_ID"
+        	,"PUSH_TEMPL_ID",		"FRT_TEMPL_ID",			"SMS_TEMPL_ID",			"KKO_BTNS",				"REG_UMS_HOST"
+        	,"SEND_RESERVE_DATE",	"TARGET_USERS",			"CSV_FILE",				"CSV_ORG_FILENAME",		"TARGET_TYPE"
+        	,"REGDATE",				"KKO_IMG_PATH",			"KKO_IMG_LINK_URL",		"MMS_IMGURL",			"SMS_TITLE"
+        	,"REPLACE_VARS",		"RCS_TITLE",			"RCS_MSG",				"IMG_GROUP_KEY",		"IMG_GROUP_CNT"
+        	,"RCS_IMG_PATH",		"RCS_TEMPL_ID",			"BRAND_ID",				"RCS_OBJECT"
+        	,"RCS_TYPE",			"FOOTER",				"COPY_ALLOWED",			"EXPIRY_OPTION",		"RCS_MSGBASE_ID"
+        	,"BTN_OBJECT",			"RCS_BTN_CNT",			"RCS_BTN_TYPE",			"RCS_MMS_INFO"
+        	,"NAVER_TEMPL_ID",      "NAVER_PROFILE",		"NAVER_MSG",			"NAVER_BUTTONS",     	"NAVER_PARTNERKEY",     "NAVER_IMGHASH"
+			,"SEND_MACRO_CODE",     "SEND_MACRO_ORDER",		"CUST_TRANSGROUPKEY",	"CUST_TRANSKEY",		"MIN_START_TIME",		"MAX_END_TIME"
+			,"FATIGUE_YN"
+        	,"VAR1",				"VAR2",					"VAR3",					"VAR4"
+        	,"VAR5",				"VAR6",					"VAR7",					"VAR8",					"VAR9",                 "ADMIN_MSG_ID"
+        	,"TOTAL_CNT",           "KKO_TITLE"
+        )
+        VALUES (
+        	  CAST(#{RESERVE_SEQNO} AS NUMERIC)
+        	 ,#{TRANS_TYPE},										    #{MSG_TYPE},			#{TITLE},				                #{APP_ID},				            #{ATTACHFILE}
+        	 ,#{PUSH_MSG},											    #{SOUNDFILE},			CAST(#{BADGENO} AS NUMERIC),            CAST(#{PRIORITY} AS NUMERIC),       #{EXT}
+        	 ,#{SENDERCODE},										    #{SERVICECODE},			#{RESERVEDATE},			                #{TARGET_USER_TYPE},	            #{DB_IN},				#{PUSH_TYPE}
+        	 ,#{PUSH_FAIL_SMS_SEND},								    #{PUSH_FAIL_WAIT_MIN},	CAST(#{SPLIT_MSG_CNT} AS NUMERIC),      CAST(#{DELAY_SECOND} AS NUMERIC),   #{ALLIMTOLK_TEMPLCODE}, #{ALLIMTALK_MSG}
+			 ,#{WPUSH_DOMAIN},										    #{WPUSH_TEMPL_ID},		#{WPUSH_TITLE},			                #{WPUSH_MSG},			            #{WPUSH_ICON}	
+			 ,#{WPUSH_LINK},										    #{WPUSH_EXT},			CAST(#{WPUSH_BADGENO} AS NUMERIC)        	 
+        	 ,#{FRIENDTOLK_MSG},									    #{SMS_MSG},				#{KKOALT_SVCID},		                #{KKOFRT_SVCID},		            #{CALLBACK_NUM}
+        	 ,#{START_SEND_KIND},									    #{SENDERID},			#{SENDGROUPCODE},		                #{PLUS_ID}
+        	 ,#{PUSH_TEMPL_ID},										    #{FRT_TEMPL_ID},		#{SMS_TEMPL_ID},		                #{KKO_BTNS},			            #{REG_UMS_HOST}
+        	 ,TO_TIMESTAMP(#{SEND_RESERVE_DATE},'YYYY-MM-DD hh24:mi'),	#{TARGET_USERS_JSON},	#{CSV_FILE},			                #{CSV_ORG_FILENAME},	            #{TARGET_TYPE}
+        	 ,NOW(),											        #{KKO_IMG_PATH},		#{KKO_IMG_LINK_URL},	                #{MMS_IMGURL},			            #{SMS_TITLE}
+        	 ,#{REPLACE_VARS},									        #{RCS_TITLE},			#{RCS_MSG},				                #{IMG_GROUP_KEY},		            #{IMG_GROUP_CNT}
+        	 ,#{RCS_IMG_PATH_JSON},								        #{RCS_TEMPL_ID},		#{BRAND_ID},			                #{RCS_OBJECT}
+        	 ,#{RCS_TYPE},										        #{FOOTER},				#{COPY_ALLOWED},		                #{EXPIRY_OPTION},		            #{RCS_MSGBASE_ID}
+        	 ,#{BTN_OBJECT},									        #{RCS_BTN_CNT},			#{RCS_BTN_TYPE},		                #{RCS_MMS_INFO}
+        	 ,#{NAVER_TEMPL_ID},                                        #{NAVER_PROFILE},       #{NAVER_MSG},                           #{NAVER_BUTTONS},      	            #{NAVER_PARTNERKEY},    #{NAVER_IMGHASH}
+        	 ,#{SEND_MACRO_CODE},                                       #{SEND_MACRO_ORDER},	#{CUST_TRANSGROUPKEY},	                #{CUST_TRANSKEY},		            #{MIN_START_TIME},		#{MAX_END_TIME}
+        	 ,#{FATIGUE_YN}
+        	 ,#{VAR1},				                                    #{VAR2},				#{VAR3},				                #{VAR4}
+        	 ,#{VAR5},												    #{VAR6},				#{VAR7},				                #{VAR8},				            #{VAR9},                #{ADMIN_MSG_ID}
+        	 ,#{TOTAL_CNT},                                             #{KKO_TITLE}
+        )
+        ]]>
+    </insert>
+
+    <select id="selUmsSendMsgOneBatch" parameterType="long" resultType="kr.uracle.ums.core.service.bean.UmsSendMsgBean">
+        <![CDATA[
+      	SELECT 
+      		 "UMS_SEQNO"
+        	,"MSG_TYPE",				"TRANS_TYPE",			"TITLE",				"APP_ID",				"ATTACHFILE"
+			,"PUSH_MSG",				"SOUNDFILE",			"BADGENO",				"PRIORITY",				"EXT"
+			,"SENDERCODE",				"SERVICECODE",			"RESERVEDATE",			"TARGET_USER_TYPE",		"DB_IN",				"PUSH_TYPE"
+			,"PUSH_FAIL_SMS_SEND",		"PUSH_FAIL_WAIT_MIN",	"SPLIT_MSG_CNT",		"DELAY_SECOND",			"ALLIMTOLK_TEMPLCODE",	"ALLIMTALK_MSG"
+			,"FRIENDTOLK_MSG",			"SMS_MSG"
+			,"KKOALT_SVCID",			"KKOFRT_SVCID",			"CALLBACK_NUM",			"START_SEND_KIND",		"SENDERID"
+			,"SENDGROUPCODE",			"PLUS_ID",				"PUSH_TEMPL_ID",		"FRT_TEMPL_ID",			"SMS_TEMPL_ID"
+			,"RESERVE_SEQNO",			"KKO_BTNS",				"KKO_IMG_PATH",			"KKO_IMG_LINK_URL",		"MMS_IMGURL"
+			,"SMS_TITLE",				"REPLACE_VARS",			"RCS_TITLE",			"RCS_MSG",				"IMG_GROUP_KEY"
+			,"IMG_GROUP_CNT",			"RCS_TEMPL_ID",			"BRAND_ID",				"RCS_OBJECT",			"BTN_OBJECT"
+			,"RCS_TYPE",				"FOOTER",				"COPY_ALLOWED",			"EXPIRY_OPTION",		"RCS_MSGBASE_ID"
+			,"RCS_BTN_CNT",				"RCS_BTN_TYPE",			"RCS_MMS_INFO"
+			,"NAVER_TEMPL_ID",			"NAVER_PROFILE",		"NAVER_MSG",          	"NAVER_BUTTONS",      	"NAVER_PARTNERKEY",     "NAVER_IMGHASH"
+			,"SEND_MACRO_CODE",			"SEND_MACRO_ORDER",		"CUST_TRANSGROUPKEY",	"CUST_TRANSKEY",		"MIN_START_TIME",		"MAX_END_TIME"
+			,"FATIGUE_YN"
+			,"VAR1",					"VAR2",					"VAR3",					"VAR4",					"VAR5"
+			,"VAR6",					"VAR7",					"VAR8",					"VAR9"
+      	FROM
+      		 "T_UMS_SEND_BATCH"
+      	WHERE 
+      		 "UMS_SEQNO" = #{UMS_SEQNO}
+      ]]>
+    </select>
+
+    <select id="selUmsSendMsgOneReal" parameterType="long" resultType="kr.uracle.ums.core.service.bean.UmsSendMsgBean">
+        <![CDATA[
+      	SELECT 
+         	 "UMS_SEQNO"
+        	,"MSG_TYPE",				"TRANS_TYPE",			"TITLE",				"APP_ID",				"ATTACHFILE"
+			,"PUSH_MSG",				"SOUNDFILE",			"BADGENO",				"PRIORITY",				"EXT"
+			,"SENDERCODE",				"SERVICECODE",			"RESERVEDATE",			"TARGET_USER_TYPE",		"DB_IN",				"PUSH_TYPE"
+			,"PUSH_FAIL_SMS_SEND",		"PUSH_FAIL_WAIT_MIN",	"SPLIT_MSG_CNT",		"DELAY_SECOND",			"ALLIMTOLK_TEMPLCODE",	"ALLIMTALK_MSG"
+			,"FRIENDTOLK_MSG",			"SMS_MSG"
+			,"KKOALT_SVCID",			"KKOFRT_SVCID",			"CALLBACK_NUM",			"START_SEND_KIND",		"SENDERID"
+			,"SENDGROUPCODE",			"PLUS_ID",				"PUSH_TEMPL_ID",		"FRT_TEMPL_ID",			"SMS_TEMPL_ID"
+			,"RESERVE_SEQNO",			"KKO_BTNS",				"KKO_IMG_PATH",			"KKO_IMG_LINK_URL",		"MMS_IMGURL"
+			,"SMS_TITLE",				"REPLACE_VARS",			"RCS_TITLE",			"RCS_MSG",				"IMG_GROUP_KEY"
+			,"IMG_GROUP_CNT",			"RCS_TEMPL_ID",			"BRAND_ID",				"RCS_OBJECT",			"BTN_OBJECT"
+			,"RCS_TYPE",				"FOOTER",				"COPY_ALLOWED",			"EXPIRY_OPTION",		"RCS_MSGBASE_ID"
+			,"RCS_BTN_CNT",				"RCS_BTN_TYPE",			"RCS_MMS_INFO"
+			,"NAVER_TEMPL_ID",			"NAVER_PROFILE",		"NAVER_MSG",          	"NAVER_BUTTONS",      	"NAVER_PARTNERKEY",     "NAVER_IMGHASH"
+			,"SEND_MACRO_CODE",			"SEND_MACRO_ORDER",		"CUST_TRANSGROUPKEY",	"CUST_TRANSKEY",		"MIN_START_TIME",		"MAX_END_TIME"
+			,"FATIGUE_YN"
+			,"VAR1",					"VAR2",					"VAR3",					"VAR4",					"VAR5"
+			,"VAR6",					"VAR7",					"VAR8",					"VAR9"
+      	FROM 
+      		"T_UMS_SEND_REAL"
+      	WHERE 
+      		"UMS_SEQNO" = #{UMS_SEQNO}
+      ]]>
+    </select>
+
+    <insert id="inUmsSendDetailBatch" parameterType="kr.uracle.ums.core.processor.bean.UmsResultBaseBean">
+        <![CDATA[
+      	INSERT INTO "T_UMS_SEND_DETAIL_BATCH"(
+      			 "DETAIL_SEQNO"
+      			,"UMS_SEQNO",		"CUID",			"CNAME",				"SEND_MSG",			"MSG_VARS"
+      			,"MOBILE_NUM",		"SEND_TYPE",	"SEND_TYPE_SEQCODE",	"SEND_RESULT",		"SUCC_STATUS"
+      			,"ERRCODE",			"RESULTMSG",	"REGDATE",				"ROOT_CHANNEL_YN",	"PROVIDER"
+      			,"SEND_TITLE"
+      		)
+      	VALUES(
+      			 NEXTVAL('"SEQ_UMS_SENDDETAIL_BATCH"')
+      			,#{MASTERTABLE_SEQNO},	#{CUID},		#{CNAME},				#{SEND_MSG},		#{MSG_VARS}
+      			,#{MOBILE_NUM},			#{SEND_TYPE},	#{SEND_TYPE_SEQCODE},	#{SEND_RESULT},		#{SUCC_STATUS}
+      			,#{ERRCODE},			#{RESULTMSG},	NOW(),					#{ROOT_CHANNEL_YN},	#{PROVIDER}
+      			,#{SEND_TITLE}
+      		)
+    	]]>
+    </insert>
+    <insert id="inUmsSendDetailReal" parameterType="kr.uracle.ums.core.processor.bean.UmsResultBaseBean">
+        <![CDATA[
+      	INSERT INTO "T_UMS_SEND_DETAIL_REAL"(
+      			 "DETAIL_SEQNO"
+      			,"UMS_SEQNO",		"CUID",			"CNAME",				"SEND_MSG",			"MSG_VARS"
+      			,"MOBILE_NUM",		"SEND_TYPE",	"SEND_TYPE_SEQCODE",	"SEND_RESULT",		"SUCC_STATUS"
+      			,"ERRCODE",			"RESULTMSG",	"REGDATE",				"ROOT_CHANNEL_YN",	"PROVIDER"
+      			,"SEND_TITLE"
+      		)
+      	VALUES(
+      			 NEXTVAL('"SEQ_UMS_SENDDETAIL_REAL"')
+      			,#{MASTERTABLE_SEQNO},	#{CUID},		#{CNAME},				#{SEND_MSG},		#{MSG_VARS}
+      			,#{MOBILE_NUM},			#{SEND_TYPE},	#{SEND_TYPE_SEQCODE},	#{SEND_RESULT},		#{SUCC_STATUS}
+      			,#{ERRCODE},			#{RESULTMSG},	NOW(),					#{ROOT_CHANNEL_YN},	#{PROVIDER}
+      			,#{SEND_TITLE}
+      		)
+    	]]>
+    </insert>
+
+    <insert id="inUmsCustomResult" parameterType="kr.uracle.ums.codec.redis.vo.CustomResultBean">
+        <![CDATA[
+        INSERT INTO "T_UMS_CUSTOM_RESULT"(
+            "SEND_TYPE_SEQCODE",  "UMS_SEQNO",              "CUID",           "PROVIDER",
+            "TRANS_TYPE",         "SEND_TYPE",              "MSG_TYPE",       "ROOT_CHANNEL_YN",
+            "SENDERID",           "SENDGROUPCODE",          "MOBILE_NUM",     "CALLBACK_NUM",
+            "TITLE",              "MSG_BODY",               "SUCC_STATUS",    "SEND_RESULT",
+            "CUST_TRANSKEY",      "CUST_TRANSGROUPKEY",     "VAR1",           "VAR2",
+            "VAR3",               "VAR4",                   "VAR5",           "VAR6",
+            "VAR7",               "VAR8",                   "VAR9",           "REG_DATE",
+            "MOD_DATE",           "APP_ID",                 "EXT"
+        )
+        VALUES(
+            #{TRANSACTION_KEY},    #{MASTERTABLE_SEQNO},        #{CUID},                #{PROVIDER},
+            #{TRANS_TYPE},         #{START_SEND_TYPE},          #{UMS_MSG_TYPE},        #{ROOT_CHANNEL_YN},
+            #{SENDERID},           #{SENDGROUPCODE},            #{MOBILE_NUM},          #{CALLBACK_NUM},
+            #{TITLE},              #{MSG_BODY},                 #{UMS_SUCC_STATUS},     #{UMS_SEND_RESULT},
+            #{CUST_TRANSKEY},      #{CUST_TRANSGROUPKEY},       #{VAR1},                #{VAR2},
+            #{VAR3},               #{VAR4},                     #{VAR5},                #{VAR6},
+            #{VAR7},               #{VAR8},                     #{VAR9},                NOW(),
+            NOW(),                 #{APP_ID},                   #{EXT}
+        )
+        ]]>
+    </insert>
+
+    <insert id="inUmsLog" parameterType="kr.uracle.ums.core.processor.bean.UmsResultBaseBean">
+        <![CDATA[
+        INSERT INTO "T_UMS_LOG"(
+            "SEND_TYPE_SEQCODE",    "PROVIDER",       "MOBILE_NUM",     "ERRCODE",       "RESULTMSG"
+        )
+        VALUES(
+            #{SEND_TYPE_SEQCODE},   #{PROVIDER},      #{MOBILE_NUM},      #{ERRCODE},     #{RESULTMSG}
+        )
+        ]]>
+    </insert>
+
+    <update id="upUmsSendCountBatch" parameterType="kr.uracle.ums.core.processor.bean.SentInfoBean">
+        <![CDATA[
+        	UPDATE
+        		"T_UMS_SEND_COUNT_BATCH"
+        	SET 
+        		 "SUCC_CNT"					=			"SUCC_CNT"				+	#{SUCC_CNT}
+				,"FAIL_CNT"					=			"FAIL_CNT"				+	#{FAIL_CNT}
+                ,"PUSH_SEND_CNT"			=			"PUSH_SEND_CNT"			+	#{PUSH_SEND_CNT}
+				,"PUSH_FAIL_CNT"			=			"PUSH_FAIL_CNT"			+	#{PUSH_FAIL_CNT}
+                ,"WPUSH_SEND_CNT"			=			"WPUSH_SEND_CNT"		+	#{WPUSH_SEND_CNT}
+				,"WPUSH_FAIL_CNT"			=			"WPUSH_FAIL_CNT"		+	#{WPUSH_FAIL_CNT}
+                ,"KKOALT_SEND_CNT"			=			"KKOALT_SEND_CNT"		+	#{KKOALT_SEND_CNT}
+				,"KKOALT_FAIL_CNT"			=			"KKOALT_FAIL_CNT"		+	#{KKOALT_FAIL_CNT}
+                ,"KKOFRT_SEND_CNT"			=			"KKOFRT_SEND_CNT"		+	#{KKOFRT_SEND_CNT}
+				,"KKOFRT_FAIL_CNT"			=			"KKOFRT_FAIL_CNT"		+	#{KKOFRT_FAIL_CNT}
+                ,"SMS_TOTAL_SEND_CNT"		=			"SMS_TOTAL_SEND_CNT"	+	#{SMS_TOTAL_SEND_CNT}
+				,"SMS_TOTAL_FAIL_CNT"		=			"SMS_TOTAL_FAIL_CNT"	+	#{SMS_TOTAL_FAIL_CNT}
+                ,"SMS_SEND_CNT"				=			"SMS_SEND_CNT"			+	#{SMS_SEND_CNT}
+				,"SMS_FAIL_CNT"				=			"SMS_FAIL_CNT"			+	#{SMS_FAIL_CNT}
+                ,"LMS_SEND_CNT"				=			"LMS_SEND_CNT"			+	#{LMS_SEND_CNT}
+				,"LMS_FAIL_CNT"				=			"LMS_FAIL_CNT"			+	#{LMS_FAIL_CNT}
+                ,"MMS_SEND_CNT"				=			"MMS_SEND_CNT"			+	#{MMS_SEND_CNT}
+				,"MMS_FAIL_CNT"				=			"MMS_FAIL_CNT"			+	#{MMS_FAIL_CNT}
+                ,"RCS_TOTAL_SEND_CNT"		=			"RCS_TOTAL_SEND_CNT"	+	#{RCS_TOTAL_SEND_CNT}
+				,"RCS_TOTAL_FAIL_CNT"		=			"RCS_TOTAL_FAIL_CNT"	+	#{RCS_TOTAL_FAIL_CNT}
+                ,"RCS_SMS_SEND_CNT"			=			"RCS_SMS_SEND_CNT"		+	#{RCS_SMS_SEND_CNT}
+				,"RCS_SMS_FAIL_CNT"			=			"RCS_SMS_FAIL_CNT"		+	#{RCS_SMS_FAIL_CNT}
+                ,"RCS_LMS_SEND_CNT"			=			"RCS_LMS_SEND_CNT"		+	#{RCS_LMS_SEND_CNT}
+				,"RCS_LMS_FAIL_CNT"			=			"RCS_LMS_FAIL_CNT"		+	#{RCS_LMS_FAIL_CNT}
+                ,"RCS_MMS_SEND_CNT"			=			"RCS_MMS_SEND_CNT"		+	#{RCS_MMS_SEND_CNT}
+				,"RCS_MMS_FAIL_CNT"			=			"RCS_MMS_FAIL_CNT"		+	#{RCS_MMS_FAIL_CNT}
+                ,"RCS_FREE_SEND_CNT"		=			"RCS_FREE_SEND_CNT"		+	#{RCS_FREE_SEND_CNT}
+				,"RCS_FREE_FAIL_CNT"		=			"RCS_FREE_FAIL_CNT"		+	#{RCS_FREE_FAIL_CNT}
+                ,"RCS_CELL_SEND_CNT"		=			"RCS_CELL_SEND_CNT"		+	#{RCS_CELL_SEND_CNT}
+				,"RCS_CELL_FAIL_CNT"		=			"RCS_CELL_FAIL_CNT"		+	#{RCS_CELL_FAIL_CNT}
+                ,"RCS_DESC_SEND_CNT"		=			"RCS_DESC_SEND_CNT"		+	#{RCS_DESC_SEND_CNT}
+				,"RCS_DESC_FAIL_CNT"		=			"RCS_DESC_FAIL_CNT"		+	#{RCS_DESC_FAIL_CNT}
+                ,"NAVER_SEND_CNT"			=			"NAVER_SEND_CNT"		+	#{NAVER_SEND_CNT}
+				,"NAVER_FAIL_CNT"			=			"NAVER_FAIL_CNT"		+	#{NAVER_FAIL_CNT}
+                ,"MODDATE"					=			NOW()
+        	WHERE
+        		"UMS_SEQNO"=#{UMS_SEQNO}
+        ]]>
+    </update>
+
+    <update id="upUmsSendCountReal" parameterType="kr.uracle.ums.core.processor.bean.SentInfoBean">
+        <![CDATA[
+        	UPDATE 
+        		"T_UMS_SEND_COUNT_REAL"
+        	SET 
+        		 "SUCC_CNT"					=			"SUCC_CNT"				+	#{SUCC_CNT}
+				,"FAIL_CNT"					=			"FAIL_CNT"				+	#{FAIL_CNT}
+                ,"PUSH_SEND_CNT"			=			"PUSH_SEND_CNT"			+	#{PUSH_SEND_CNT}
+				,"PUSH_FAIL_CNT"			=			"PUSH_FAIL_CNT"			+	#{PUSH_FAIL_CNT}
+                ,"WPUSH_SEND_CNT"			=			"WPUSH_SEND_CNT"		+	#{WPUSH_SEND_CNT}
+				,"WPUSH_FAIL_CNT"			=			"WPUSH_FAIL_CNT"		+	#{WPUSH_FAIL_CNT}
+                ,"KKOALT_SEND_CNT"			=			"KKOALT_SEND_CNT"		+	#{KKOALT_SEND_CNT}
+				,"KKOALT_FAIL_CNT"			=			"KKOALT_FAIL_CNT"		+	#{KKOALT_FAIL_CNT}
+                ,"KKOFRT_SEND_CNT"			=			"KKOFRT_SEND_CNT"		+	#{KKOFRT_SEND_CNT}
+				,"KKOFRT_FAIL_CNT"			=			"KKOFRT_FAIL_CNT"		+	#{KKOFRT_FAIL_CNT}
+                ,"SMS_TOTAL_SEND_CNT"		=			"SMS_TOTAL_SEND_CNT"	+	#{SMS_TOTAL_SEND_CNT}
+				,"SMS_TOTAL_FAIL_CNT"		=			"SMS_TOTAL_FAIL_CNT"	+	#{SMS_TOTAL_FAIL_CNT}
+                ,"SMS_SEND_CNT"				=			"SMS_SEND_CNT"			+	#{SMS_SEND_CNT}
+				,"SMS_FAIL_CNT"				=			"SMS_FAIL_CNT"			+	#{SMS_FAIL_CNT}
+                ,"LMS_SEND_CNT"				=			"LMS_SEND_CNT"			+	#{LMS_SEND_CNT}
+				,"LMS_FAIL_CNT"				=			"LMS_FAIL_CNT"			+	#{LMS_FAIL_CNT}
+                ,"MMS_SEND_CNT"				=			"MMS_SEND_CNT"			+	#{MMS_SEND_CNT}
+				,"MMS_FAIL_CNT"				=			"MMS_FAIL_CNT"			+	#{MMS_FAIL_CNT}
+                ,"RCS_TOTAL_SEND_CNT"		=			"RCS_TOTAL_SEND_CNT"	+	#{RCS_TOTAL_SEND_CNT}
+				,"RCS_TOTAL_FAIL_CNT"		=			"RCS_TOTAL_FAIL_CNT"	+	#{RCS_TOTAL_FAIL_CNT}
+                ,"RCS_SMS_SEND_CNT"			=			"RCS_SMS_SEND_CNT"		+	#{RCS_SMS_SEND_CNT}
+				,"RCS_SMS_FAIL_CNT"			=			"RCS_SMS_FAIL_CNT"		+	#{RCS_SMS_FAIL_CNT}
+                ,"RCS_LMS_SEND_CNT"			=			"RCS_LMS_SEND_CNT"		+	#{RCS_LMS_SEND_CNT}
+				,"RCS_LMS_FAIL_CNT"			=			"RCS_LMS_FAIL_CNT"		+	#{RCS_LMS_FAIL_CNT}
+                ,"RCS_MMS_SEND_CNT"			=			"RCS_MMS_SEND_CNT"		+	#{RCS_MMS_SEND_CNT}
+				,"RCS_MMS_FAIL_CNT"			=			"RCS_MMS_FAIL_CNT"		+	#{RCS_MMS_FAIL_CNT}
+                ,"RCS_FREE_SEND_CNT"		=			"RCS_FREE_SEND_CNT"		+	#{RCS_FREE_SEND_CNT}
+				,"RCS_FREE_FAIL_CNT"		=			"RCS_FREE_FAIL_CNT"		+	#{RCS_FREE_FAIL_CNT}
+                ,"RCS_CELL_SEND_CNT"		=			"RCS_CELL_SEND_CNT"		+	#{RCS_CELL_SEND_CNT}
+				,"RCS_CELL_FAIL_CNT"		=			"RCS_CELL_FAIL_CNT"		+	#{RCS_CELL_FAIL_CNT}
+                ,"RCS_DESC_SEND_CNT"		=			"RCS_DESC_SEND_CNT"		+	#{RCS_DESC_SEND_CNT}
+				,"RCS_DESC_FAIL_CNT"		=			"RCS_DESC_FAIL_CNT"		+	#{RCS_DESC_FAIL_CNT}
+                ,"NAVER_SEND_CNT"			=			"NAVER_SEND_CNT"		+	#{NAVER_SEND_CNT}
+				,"NAVER_FAIL_CNT"			=			"NAVER_FAIL_CNT"		+	#{NAVER_FAIL_CNT}
+                ,"MODDATE"					=			NOW()
+        	WHERE
+        		"UMS_SEQNO" = #{UMS_SEQNO}
+        ]]>
+    </update>
+
+    <insert id="inUmsSendCountReal" parameterType="kr.uracle.ums.core.processor.bean.SentInfoBean">
+        <![CDATA[
+      	INSERT INTO "T_UMS_SEND_COUNT_REAL"(
+			"UMS_SEQNO", "REQ_SEND_CNT", "SUCC_CNT", "FAIL_CNT", "REGDATE"
+		)
+      	VALUES(
+			#{UMS_SEQNO}, #{REQ_SEND_CNT}, #{SUCC_CNT}, #{FAIL_CNT}, NOW()
+		)
+    	]]>
+    </insert>
+
+    <insert id="inUmsSendCountBatch" parameterType="kr.uracle.ums.core.processor.bean.SentInfoBean">
+        <![CDATA[
+      	INSERT INTO "T_UMS_SEND_COUNT_BATCH"(
+			"UMS_SEQNO", "REQ_SEND_CNT", "SUCC_CNT", "FAIL_CNT", "REGDATE"
+      	)
+      	VALUES(
+			#{UMS_SEQNO}, #{REQ_SEND_CNT}, #{SUCC_CNT}, #{FAIL_CNT}, NOW()
+      	)
+    	]]>
+    </insert>
+
+    <insert id="inUmsReactCountBatch" parameterType="kr.uracle.ums.core.processor.react.ReactProcessBean">
+        <![CDATA[
+      	INSERT INTO "T_UMS_REACT_COUNT_BATCH"(
+			"UMS_SEQNO", "CUST_TRANSGROUPKEY", "CUST_TRANSKEY", "REGDATE"
+		)
+      	VALUES(
+			#{UMS_SEQNO}, #{CUST_TRANSGROUPKEY}, #{CUST_TRANSKEY}, NOW()
+      	)
+    	]]>
+    </insert>
+
+    <update id="upUmsReactCountBatch" parameterType="kr.uracle.ums.core.processor.react.ReactProcessBean">
+        UPDATE 
+			"T_UMS_REACT_COUNT_BATCH"
+        SET
+        	"REACT_CNT"		=	"REACT_CNT"		+1
+        <if test="BUTTON1_ID != null">
+			,"BUTTON1_ID"	=	#{BUTTON1_ID}
+			,"BUTTON1_CNT"	=	"BUTTON1_CNT"	+1
+        </if>
+        <if test="BUTTON2_ID != null">
+            ,"BUTTON2_ID"	=	#{BUTTON2_ID}
+            ,"BUTTON2_CNT"	=	"BUTTON2_CNT"	+1
+        </if>
+        <if test="BUTTON3_ID != null">
+            ,"BUTTON3_ID"	=	#{BUTTON3_ID}
+            ,"BUTTON3_CNT"	=	"BUTTON3_CNT"	+1
+        </if>
+        <if test="BUTTON4_ID != null">
+            ,"BUTTON4_ID"	=	#{BUTTON4_ID}
+            ,"BUTTON4_CNT"	=	"BUTTON4_CNT"	+1
+        </if>
+        <if test="BUTTON5_ID != null">
+            ,"BUTTON5_ID"	=	#{BUTTON5_ID}
+            ,"BUTTON5_CNT"	=	"BUTTON5_CNT"	+1
+        </if>
+        <if test="BUTTON6_ID != null">
+            ,"BUTTON6_ID"	=	#{BUTTON6_ID}
+            ,"BUTTON6_CNT"	=	"BUTTON6_CNT"	+1
+        </if>
+        <if test="BUTTON7_ID != null">
+            ,"BUTTON7_ID"	=	#{BUTTON7_ID}
+            ,"BUTTON7_CNT"	=	"BUTTON7_CNT"	+1
+        </if>
+			,"MODDATE"		=	NOW()
+        WHERE 
+			"CUST_TRANSKEY"	=	#{CUST_TRANSKEY}
+    </update>
+</mapper>

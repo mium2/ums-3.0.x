@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mms.lotte">
+    <insert id="inMmsSend" parameterType="kr.uracle.ums.codec.redis.vo.mms.LotteMmsProcessBean">
+        <![CDATA[
+        INSERT INTO kmp_msg(
+            "CMID",			    	"MSG_TYPE",        		"STATUS",
+            "REQUEST_TIME",	        "SEND_TIME",	        "DEST_PHONE",
+            "DEST_NAME",			"SEND_PHONE",		    "SEND_NAME",
+            "SUBJECT",        		"MSG_BODY",	        	"USER1",
+            "USER2",      	        "ATTACHED_FILE",        "BARCODE",
+            "AD_FLAG",              "MKT_FLAG",             "USER9"
+        )
+        VALUES(
+            #{CMID},			    #{MSG_TYPE},        		#{STATUS},
+            NOW(),                  NOW(),		        	    #{MOBILE_NUM},
+            #{DEST_NAME},	        #{CALLBACK_NUM},	        #{SEND_NAME},
+            #{TITLE},	        	#{MSG_BODY},	        	#{USER1},
+            #{USER2},       	    #{ATTACHED_FILE},           #{BARCODE},
+            #{AD_FLAG},             #{MKT_FLAG},                #{TRANSACTION_KEY}
+        )
+        ]]>
+    </insert>
+
+    <insert id="inMmsSendDynamic" parameterType="kr.uracle.ums.codec.redis.vo.mms.LotteMmsProcessBean">
+        <![CDATA[
+        INSERT INTO ${TABLE_NAME}(
+            "CMID",			    	"MSG_TYPE",        		"STATUS",
+            "REQUEST_TIME",	        "SEND_TIME",	        "DEST_PHONE",
+            "DEST_NAME",			"SEND_PHONE",		    "SEND_NAME",
+            "SUBJECT",        		"MSG_BODY",	        	"USER1",
+            "USER2",      	        "ATTACHED_FILE",        "BARCODE",
+            "AD_FLAG",              "MKT_FLAG",             "USER9"
+        )
+        VALUES(
+            #{CMID},			    #{MSG_TYPE},        		#{STATUS},
+            NOW(),                  NOW(),		        	    #{MOBILE_NUM},
+            #{DEST_NAME},	        #{CALLBACK_NUM},	        #{SEND_NAME},
+            #{TITLE},	        	#{MSG_BODY},	        	#{USER1},
+            #{USER2},       	    #{ATTACHED_FILE},           #{BARCODE},
+            #{AD_FLAG},             #{MKT_FLAG},                #{TRANSACTION_KEY}
+        )
+        ]]>
+    </insert>
+</mapper>
